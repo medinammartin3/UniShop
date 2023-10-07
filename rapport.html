@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport - Devoir 1 IFT2255</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Entête -->
+    <header>
+        <h1>Rapport</h1>
+        <h2>Devoir 1 - IFT 2255</h2>
+        <h3><em>Automne 2023</em></h3>
+    </header>
+
+    <br><br>
+
+    <main>
+        <!-- Information de l'équipe -->
+        <section>
+            <h2>Information de l'équipe</h2>
+            <h3>Nom de l'équipe : <span class="notBold">Les trois mousquetaires</span></h3>
+            <a href="https://github.com/medinammartin3/Projet_IFT2255.git">Lien vers dépôt GitHub</a>
+            <br>
+            <a href="">Lien vers fichiers Visual Paradigm</a>
+            <h3>Membres de l'équipe : </h3>
+            <ul id="membres">
+                <li>Martin Medina</li>
+                    <ul class="info-membre">
+                        <li>Matricule : 20235219</li>
+                        <li>Courriel : martin.medina@umontreal.ca</li>
+                        <li>Temps mis : 6 heures</li>
+                    </ul>
+                <li>Mandi Vigier</li>
+                    <ul class="info-membre">
+                        <li>Matricule : 20237155</li>
+                        <li>Courriel : mandi.teo.vigier@umontreal.ca</li>
+                        <li>Temps mis : 6 heures</li>
+                    </ul>
+                <li>Étienne Mitchell-Bouchard</li>
+                    <ul class="info-membre">
+                        <li>Matricule : 20243430</li>
+                        <li>Courriel : etienne.mitchell-bouchard@umontreal.ca</li>
+                        <li>Temps mis : 6 heures</li>
+                    </ul>
+            </ul>
+        </section>
+
+        <br>
+
+        <!-- Distribution -->
+        <section>
+            <h2>Distribution des tâches</h2>
+            <table>
+                <tr>
+                    <th>Tâche</th>
+                    <th>Martin Medina</th>
+                    <th>Mandi Vigier</th>
+                    <th>Étienne Mitchell-Bouchard</th>
+                </tr>
+                <tr>
+                    <td>Glossaire</td>
+                    <td>3 termes (30%)</td>
+                    <td>4 termes (35%)</td>
+                    <td>4 termes (35%)</td>
+                </tr>
+                <tr>
+                    <td>Diagramme de cas d'utilisation UML</td>
+                    <td>Logique (25%)</td>
+                    <td>Réalisation du diagramme (50%)</td>
+                    <td>Logique (25%)</td>
+                </tr>
+                <tr>
+                    <td>Cas d'utilisation</td>
+                    <td>5 CU (50%)</td>
+                    <td>2 CU (20%)</td>
+                    <td>3 CU (30%)</td>
+                </tr>
+                <tr>
+                    <td>Risques</td>
+                    <td>1 risque (20%)</td>
+                    <td>1 risque (20%)</td>
+                    <td>3 risques (60%)</td>
+                </tr>
+                <tr>
+                    <td>Exigences non-fonctionnelles</td>
+                    <td>1 exigence (20%)</td>
+                    <td>1 exigence (20%)</td>
+                    <td>3 exigences (60%)</td>
+                </tr>
+            </table>
+        </section>
+
+        <br>
+
+        <!-- Annonce -->
+        <h2>Annonce de distribution du travail</h2>
+        <p>Nous assurons que les 3 coéquipiers ont fait un travail équivalent et désirent avoir la même note.</p>
+
+        <br>
+        
+        <!-- Tâche 1-->
+        <section>
+            <h2>Tâche 1 : <span class="notBold">Glossaire</span></h2>
+            <ol>
+                <li><strong>Java</strong>: Langage de programmation utilisé pour développer le projet.</li>
+                <li><strong>Commerce en ligne</strong>: Système permettant d'acheter des produits ou services sur Internet, offrant aux clients la possibilité de parcourir et d'acheter des articles en ligne.</li>
+                <li><strong>Client</strong>: Personne qui utilise les services du site et achète des biens</li>
+            </ol>
+        </section>
+
+        <br>
+
+        <!-- Tâche 2-->
+        <section>
+            <h2>Tâche 2 : <span class="notBold">Diagramme de cas d'utilisation UML</span></h2>
+        </section>
+
+        <br>
+
+        <!-- Tâche 3-->
+        <section>
+            <h2>Tâche 3 : <span class="notBold">Cas d'utilisation</span></h2>
+            <ol class="CUs">
+                <!-- Cas d'utilisation 1 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            S'inscrire comme acheteur.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand un potentiel client accède dans le site, avant de commander des produits il devra s'incrire comme acheteur. 
+                            Avec cela, il deviendra un utilisateur registré dans UniShop et ses données personnelles seront inscrits dans notre base de données.
+                            Une fois l'acheteur enregistre ses données personnelles, il faut vérifier que l'acheteur n'existe pas déjà dans notre base de données.
+                            S'il n'existe pas, alors on enregistre le nouveau acheteur dans notre système et il pourra acheter des produits.
+                        </li>
+                        <li><strong>Préconditions</strong>: Il n'y a pas de préconditions nécessaires pour s'inscrire comme acheteur.</li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: Le client.</li>
+                                <li><strong>Secondaires</strong>: Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le client accède au site.</li>
+                                <li><strong>Étape 2</strong>: Le client décide de s'enregistrer comme acheteur.</li>
+                                <li><strong>Étape 3</strong>: Le client rempli tous ses informations personnelles.</li>
+                                <li><strong>Étape 4</strong>: Le client enregistre ses données personnelles.</li>
+                                <li><strong>Étape 5</strong>: Le système vérifie que le client n'existe pas déjà.</li>
+                                <li><strong>Étape 6</strong>: Le système enregistre les informations et le client est enregistré comme acheteur.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Le client éxiste déjà dans le système</strong>: Le système n'enregistre pas le client, lui informe qu'il était déjà enregistré et lui demande de se connecter à son compte.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre le nouveau acheteur et ses information personnelles dans la base de données.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 2 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            S'inscrire comme vendeur.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand une personne qui veut vendre un produit accède dans le site, avant de vendre ses produits il devra s'incrire comme vendeur. 
+                            Avec cela, il deviendra un vendeur registré dans UniShop et ses données personnelles seront inscrits dans notre base de données.
+                            Une fois le vendeur enregistre ses données personnelles, il faut vérifier que le vendeur n'existe pas déjà dans notre base de données.
+                            S'il n'existe pas, alors on enregistre le nouveau vendeur dans notre système et il pourra vendre ses produits.
+                        </li>
+                        <li><strong>Préconditions</strong>: Il n'y a pas de préconditions nécessaires pour s'inscrire comme vendeur.</li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: Le vendeur.</li>
+                                <li><strong>Secondaires</strong>: Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le vendeur accède au site.</li>
+                                <li><strong>Étape 2</strong>: L'utilisateur décide de s'enregistrer comme vendeur.</li>
+                                <li><strong>Étape 3</strong>: Le vendeur rempli tous ses informations personnelles.</li>
+                                <li><strong>Étape 4</strong>: Le vendeur enregistre ses données personnelles.</li>
+                                <li><strong>Étape 5</strong>: Le système vérifie que le vendeur n'existe pas déjà.</li>
+                                <li><strong>Étape 6</strong>: Le système enregistre les informations et l'utilisateur est enregistré comme vendeur.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Le vendeur éxiste déjà dans le système</strong>: Le système n'enregistre pas le vendeur, lui informe qu'il était déjà enregistré et lui demande de se connecter à son compte.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre le nouveau vendeur et ses information personnelles dans la base de données.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 3 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Laisser un commentaire ou une évaluation d'un produit.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand un acheteur veut donner son opinion sur un produit qu'il a déjà acheté, il peut mettre un commentaire ou laisser une évaluation du produit.
+                            Cela aidera aux futurs acheteurs du produit, de savoir si le produit est bon ou pas.
+                            Les commentaires seront sous forme de texte et l'acheteur pourra écrire son expérience avec le produit et s'il le recommande pour les possibles futurs acheteurs.
+                            L'évaluation sera une note de 1 à 5 que l'acheteur pourra donner au produit selon son expérience et sa satisfaction avec celui-ci.
+                            Le système vérifiera que le client a déjà acheté le produit. Si c'est le cas, il permettra au client de laisser le commentaire ou l'évaluation.
+                        </li>
+                        <li><strong>Préconditions</strong>: Être déjà inscrit comme acheteur.</li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: L'acheteur.</li>
+                                <li><strong>Secondaires</strong>: Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 2</strong>: Le client accède au site.</li>
+                                <li><strong>Étape 2</strong>: Le client s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: L'utilisateur sélectionne le produit duquel il veut commenter ou laisser une évaluation.</li>
+                                <li><strong>Étape 4</strong>: Le système vérifie que l'utilisateur a déjà acheté le produit qu'il veut commenter ou évaluer.</li>
+                                <li><strong>Étape 5</strong>: L'acheteur laisse un commentaire et/ou une évaluation du produit.</li>
+                                <li><strong>Étape 6</strong>: Le système enregistre le commentaire et/ou l'évaluation laissé par le client.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>L'utilisateur n'est pas connecté</strong>: Le système lui demmande de s'authentifier (accéder à son compte).</li>
+                                <li><strong>Le client n'a pas acheté le produit</strong>: Le système lui informe que pour commenter et/ou évaluer un produit, il doit l'avoir acheté. Le client ne pourra pas commenter et/ou évaluer le produit.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre le commentaire et/ou l'évaluation laissé par le client dans la base de données.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 4 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Confirmer la réception d'un retour de commande.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand un client commande un produit, il a le droit de le retourner s'il n'est pas conforme.
+                            Le vendeur reçoit alors l'identifiant unique que la commande.
+                            La commande est retournée à l'entrepôt.
+                            Le vendeur vérifie la commande et son identifiant.
+                            Si tout est correct, le vendeur confirme la réception du retour de la commande et l'état de la commande est mise à jour.
+                        </li>
+                        <li><strong>Préconditions</strong>: Le client doit avoir réalisé une commande.</li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: Le vendeur.</li>
+                                <li><strong>Secondaires</strong>: Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le vendeur accède au site.</li>
+                                <li><strong>Étape 2</strong>: Le vendeur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: Le vendeur vérifie l'identifiant unique de la commande.</li>
+                                <li><strong>Étape 4</strong>: Le vendeur confirme la réception du retour de la commande.</li>
+                                <li><strong>Étape 5</strong>: L'état de la commande est mise à jour.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Il y a un problème avec la commande</strong>: Le vendeur ne confirme pas la commande et informe le système du problème.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre la confirmation du retour de la commande et l'état de la commande est mise à jour.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 5 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Confirmer la réception d'une commande par un acheteur.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand un client reçoit sa commande, il doit confirmer qu'il l'a bien reçu.
+                            Lors de plusieurs vérifications du système, si tout est correct, le système enregistre la réception de la commande et l'état de la commande est mise à jour.
+                        </li>
+                        <li><strong>Préconditions</strong>: Le client doit avoir réalisé une commande.</li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: L'acheteur.</li>
+                                <li><strong>Secondaires</strong>:Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le acheteur accède au site.</li>
+                                <li><strong>Étape 2</strong>: Le acheteur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: Le système vérifie l'identifiant unique de la commande et son état de livraison.</li>
+                                <li><strong>Étape 4</strong>: L'acheteur confirme la réception de la commande.</li>
+                                <li><strong>Étape 5</strong>: L'état de la commande est mise à jour.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Le client ne confirme jamais la réception de la commande</strong>: Le système demande à l'acheteur s'il a reçu la commande.</li>
+                                <li><strong>L'état de la commande n'est pas 'En livraison'</strong>: L'acheteur ne peut pas confirmer la réception de la commande.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre la confirmation de réception de la commande et l'état de la commande est mise à jour à 'Livré'.</li>
+                    </ul>
+                </li>
+            </ol>
+        </section>
+        
+        <br>
+
+        <!-- Tâche 4-->
+        <section>
+            <h2>Tâche 4 : <span class="notBold">Risques</span></h2>
+            <ol>
+                <li><strong>Problèmes de livraison</strong>: Il se peut que le système de livraison utilisé occasionne des erreurs comme par exemple un colis livré à la mauvaise adresse ou pas de livreur disponible pour livrer.</li>
+            </ol>
+        </section>
+
+        <br>
+
+        <!-- Tâche 5-->
+        <section>
+            <h2>Tâche 5 : <span class="notBold">Exigences non-fonctionnelles</span></h2>
+            <ol>
+                <li><strong>Rapidité du service</strong>: Affichage rapide des informations (&le; 1 secondes) et recherche et tri des produits rapides (&le; secondes)</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Statistiques GitHub</h2>
+        </section>
+    </main>
+
+    <br>
+    <hr>
+
+    <footer>
+        <p>Ceci est la fin du Rapport du Devoir 1 du cours ITF2255</p>
+        <p><em>Cette page Web à été faite par : Martin Medina, Mandi Vigier et Étienne Mitchell-Bouchard</em></p>
+        <p><strong>&copy; Les trois mousquetaires</strong></p>
+    </footer>
+</body>
+</html>
