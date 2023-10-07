@@ -104,6 +104,10 @@
                 <li><strong>Java</strong>: Langage de programmation utilisé pour développer le projet.</li>
                 <li><strong>Commerce en ligne</strong>: Système permettant d'acheter des produits ou services sur Internet, offrant aux clients la possibilité de parcourir et d'acheter des articles en ligne.</li>
                 <li><strong>Client</strong>: Personne qui utilise les services du site et achète des biens</li>
+                <li><strong>Inventaire</strong>: Patalogue repertoriant tous les produits disponible sur le commerce en ligne.</li>
+                <li><strong>Commande</strong>: Demande faite par un client pour acheter un produit ou un service particulier à partir d'une boutique en ligne, indiquant les détails de l'achat souhaité.</li>
+                <li><strong>Produit</strong>: Un article ou un service disponible à la vente dans un commerce en ligne, pouvant inclure une variété de biens physiques ou de services numériques.</li>
+                <li><strong>Paiement</strong>: Moyen d'acheminer le capital vers les comptes de banques de ceux qui gèrent la boutique.</li>
             </ol>
         </section>
 
@@ -112,6 +116,7 @@
         <!-- Tâche 2-->
         <section>
             <h2>Tâche 2 : <span class="notBold">Diagramme de cas d'utilisation UML</span></h2>
+            <img src="UML.svg" alt="Diagramme UML">
         </section>
 
         <br>
@@ -310,6 +315,85 @@
                         <li><strong>Postconditions</strong>: Le système enregistre la confirmation de réception de la commande et l'état de la commande est mise à jour à 'Livré'.</li>
                     </ul>
                 </li>
+
+                <!-- Cas d'utilisation 6 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Ajouter un produit à vendre.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand un vendeur veut vendre un nouveau produit, il peut l'ajouter.
+                            Il devra spécifier toutes les caractéristiques du produit, et il pourra ajouter des photos du produit et changer son prix à tout moment.
+                        </li>
+                        <li><strong>Préconditions</strong>: Le vendeur doit être inscrit.</li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: Le vendeur.</li>
+                                <li><strong>Secondaires</strong>:Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le vendeur accède au site.</li>
+                                <li><strong>Étape 2</strong>: Le vendeur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: Le vendeur choisit le nouveau produit à vendre.</li>
+                                <li><strong>Étape 4</strong>: Le vendeur ajoute les caractéristiques du produit.</li>
+                                <li><strong>Étape 5</strong>: Le vendeur publie le nouveau produit et il peut ajouter des images et des vidéos.</li>
+                                <li><strong>Étape 6</strong>: Le système enregistre la publication du nouveau produit.</li>
+                                <li><strong>Étape 7</strong>: Le vendeur change s'il veut le prix du produit.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Le vendeur ne spécifie pas les caractéristiques du produit</strong>: Le système demande au vendeur de le faire.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre la publication du nouveau produit et le produit devient disponible aux clients.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 7 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Trouver un vendeur.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Si le client le désire, il peut chercher directement un vendeur. 
+                            Il pourra filtrer la recherche en utilisant le nom du vendeur, son adresse et les catégories de produits.
+                            Le client pourra "liker" un vendeur pour recevoir des nouvelles (nouveaux produits, promotions, etc).
+                        </li>
+                        <li><strong>Préconditions</strong>: 
+                            <ul>
+                                <li>L'acheteur doit être inscrit.</li>
+                                <li>Le vendeur cherché par le client doit être inscrit.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: L'acheteur.</li>
+                                <li><strong>Secondaires</strong>:Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le client accède au site.</li>
+                                <li><strong>Étape 2</strong>: L'acheteur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: Le client cherche des vendeurs et le système affiche la liste de vendeurs.</li>
+                                <li><strong>Étape 4</strong>: Il peut appliquer les filtres désirés.</li>
+                                <li><strong>Étape 5</strong>: L'acheteur sélectionne un vendeur.</li>
+                                <li><strong>Étape 6</strong>: L'acheteur peut "liker" le vendeur choisit.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Aucun vendeur correspond aux filtres de l'acheteur</strong>: Le système n'affiche aucun vendeur et en informe l'acheteur.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre si le client "like" un vendeur pour après lui envoyer des nouvelles sur le vendeur.</li>
+                    </ul>
+                </li>
             </ol>
         </section>
         
@@ -320,6 +404,7 @@
             <h2>Tâche 4 : <span class="notBold">Risques</span></h2>
             <ol>
                 <li><strong>Problèmes de livraison</strong>: Il se peut que le système de livraison utilisé occasionne des erreurs comme par exemple un colis livré à la mauvaise adresse ou pas de livreur disponible pour livrer.</li>
+                <li><strong>Types de produits</strong>: S'assurer que les produits offerts respectent les catégories dans lesquelles ils sont. Par exemple, ne pas laisser les gens vendre leur voiture ou tout autre bien qui n'ont aucun lien avec la catégorie choisie.</li>
             </ol>
         </section>
 
@@ -330,6 +415,7 @@
             <h2>Tâche 5 : <span class="notBold">Exigences non-fonctionnelles</span></h2>
             <ol>
                 <li><strong>Rapidité du service</strong>: Affichage rapide des informations (&le; 1 secondes) et recherche et tri des produits rapides (&le; secondes)</li>
+                <li><strong>Facilité de navigation</strong>: L'interface utilisateur du service est compréhensible et facile à naviguer. Les utilisateurs vont pouvoir facilement accéder à toutes les fonctionnalités offertes sans chercher où elles se trouvent.</li>
             </ol>
         </section>
 
