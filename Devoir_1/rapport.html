@@ -108,6 +108,12 @@
                 <li><strong>Commande</strong>: Demande faite par un client pour acheter un produit ou un service particulier à partir d'une boutique en ligne, indiquant les détails de l'achat souhaité.</li>
                 <li><strong>Produit</strong>: Un article ou un service disponible à la vente dans un commerce en ligne, pouvant inclure une variété de biens physiques ou de services numériques.</li>
                 <li><strong>Paiement</strong>: Moyen d'acheminer le capital vers les comptes de banques de ceux qui gèrent la boutique.</li>
+                <li><strong>Numéro de confirmation</strong>: Identifiant unique attribué à une commande ou à une transaction effectuée en ligne, permettant aux clients de suivre leur achat et aux commerçants de vérifier les transactions.</li>
+                <li><strong>Revendeur</strong>: Entreprise ou une personne qui vend des produits ou services à des clients, qu'ils aient été fabriqués par eux-mêmes ou par d'autres fournisseurs.</li>
+                <li><strong>Panier d'achat</strong>: Espace virtuel sur un site de commerce en ligne où les clients ajoutent des produits qu'ils souhaitent acheter avant de passer à la caisse pour finaliser leur commande.</li>
+                <li><strong>Information personnelle</strong>: Données spécifiques d'un individu, telles que le nom, l'adresse, le numéro de téléphone ou l'adresse électronique, qui peuvent être nécessaires lors de la création d'un compte ou 
+                    de la passation d'une commande en ligne. Ces informations sont généralement traitées avec confidentialité.
+                </li>
             </ol>
         </section>
 
@@ -394,6 +400,127 @@
                         <li><strong>Postconditions</strong>: Le système enregistre si le client "like" un vendeur pour après lui envoyer des nouvelles sur le vendeur.</li>
                     </ul>
                 </li>
+
+                <!-- Cas d'utilisation 8 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Changer l'état d'une commande.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Mettre à jour l'état de la commande pendant les différents étapes du processus de livraison.
+                            Cela permettra de maintenir l'acheteur informé sur l'état présent de sa commande.
+                        </li>
+                        <li><strong>Préconditions</strong>: L'acheteur doit avoir réalisé une commande.</li>
+                        </li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: Le vendeur.</li>
+                                <li><strong>Secondaires</strong>:Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le vendeur accède au site.</li>
+                                <li><strong>Étape 2</strong>: Le vendeur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: Le système valide l'identifiant unique de la commande.</li>
+                                <li><strong>Étape 4</strong>: Le vendeur modifie l'état de la commande ("En production", "En livraison", "Livré").</li>
+                                <li><strong>Étape 5</strong>: Le système met à jour l'état de la commande.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>L'acheteur n'a pas confirmé la réception de la commande</strong>: Le vendeur ne pourra pas modifier l'état de la commande à "Livré".</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre le nouveau état de la commande et l'état de la commande est mis à jour.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 9 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Mettre un produit dans le panier d'achat.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand l'acheteur veut acheter un produit, il doit l'ajouter au panier d'achat.
+                            Le panier d'achat contiendra tous les produits que le client veut acheter.
+                            Le client peut continuer a regarder des produit pendant que d'autres produits sont dans le panier d'achat.
+                        </li>
+                        <li><strong>Préconditions</strong>: 
+                            <ul>
+                                <li>L'acheteur doit être inscrit.</li>
+                                <li>Le vendeur doit avoir publié le produit.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: L'acheteur.</li>
+                                <li><strong>Secondaires</strong>:Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le client accède au site.</li>
+                                <li><strong>Étape 2</strong>: L'acheteur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: Le client cherche des produit dans le catalogue et en trouve un qui l'intéresse.</li>
+                                <li><strong>Étape 4</strong>: Le système vérifie que le produit est disponible.</li>
+                                <li><strong>Étape 5</strong>: Le produit est ajouté au panier d'achat.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Le produit n'est pas disponible</strong>: Le système informe l'acheteur que le produit n'est pas disponible et le produit n'est pas ajouté au panier d'achat.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre le panier d'achat de l'acheteur avec le nouveau produit.</li>
+                    </ul>
+                </li>
+
+                <!-- Cas d'utilisation 10 -->
+                <li>
+                    <ul class="CU">
+                        <li><strong>Cas d'utilisation</strong>: 
+                            Procéder une commande.
+                        </li>
+                        <li><strong>But</strong>: 
+                            Quand l'acheteur a finit de magasiner, il commande les produits dans son panier d'achat.
+                            La commande sera produite et les démarches de livraison commenceront.
+                        </li>
+                        <li><strong>Préconditions</strong>: 
+                            <ul>
+                                <li>L'acheteur doit être inscrit.</li>
+                                <li>L'acheteur doit avoir au moins un produit dans son panier d'achat.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Acteurs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>Principal</strong>: L'acheteur.</li>
+                                <li><strong>Secondaires</strong>:Le système.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénario principal</strong>: 
+                            <ul class="sousListes">
+                                <li><strong>Étape 1</strong>: Le client accède au site.</li>
+                                <li><strong>Étape 2</strong>: L'acheteur s'authentifie (il accède à son compte).</li>
+                                <li><strong>Étape 3</strong>: L'acheteur lance la commande.</li>
+                                <li><strong>Étape 4</strong>: Le client remplit ses informations personnelles.</li>
+                                <li><strong>Étape 5</strong>: Le client fournit ses informations de paiement et de livraison (le client peut utiliser l'adresse de son profil).</li>
+                                <li><strong>Étape 6</strong>: Le système vérifie les informations de paiement et de livraison.</li>
+                                <li><strong>Étape 7</strong>: Le système confirme la commande et affiche l'identifiant unique.</li>
+                                <li><strong>Étape 7</strong>: Le système met à jour la quantité de produits disponibles dans l'inventaire du vendeur.</li>
+                                <li><strong>Étape 5</strong>: L'état de la commande est affiché.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Scénarios alternatifs</strong>:
+                            <ul class="sousListes">
+                                <li><strong>L'information de paiement ne sont pas valides</strong>: Le système informe l'acheteur que ses informations de paiement sont incorrectes et lui demande d'essayer à nouveau.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Postconditions</strong>: Le système enregistre la commande et informe le vendeur.</li>
+                    </ul>
+                </li>
             </ol>
         </section>
         
@@ -405,6 +532,9 @@
             <ol>
                 <li><strong>Problèmes de livraison</strong>: Il se peut que le système de livraison utilisé occasionne des erreurs comme par exemple un colis livré à la mauvaise adresse ou pas de livreur disponible pour livrer.</li>
                 <li><strong>Types de produits</strong>: S'assurer que les produits offerts respectent les catégories dans lesquelles ils sont. Par exemple, ne pas laisser les gens vendre leur voiture ou tout autre bien qui n'ont aucun lien avec la catégorie choisie.</li>
+                <li><strong>Fuite d'information</strong>: Il faut protéger les informations personnelles des utilisateurs comme leur adresse et courriel. Ceci implique d'ajouter des niveaux de sécurité à la base de données utilisée par UniShop pour empêcher que des “hackers” obtiennent illégalement des informations sur les acheteurs et les revendeurs.</li>
+                <li><strong>Gestion des paiements</strong>: Il est possible qu' en manipulant de l'argent, celle-ci soit mal acheminée vers les comptes visés. Il est par exemple possible qu'un acheteur annule un paiement sur sa carte de crédit alors que le produit a bel et bien été livré, ce qui causerait un problème pour le revendeur qui n'aura pas été payé.</li>
+                <li><strong>Mauvais produits livrés</strong>: Un revendeur pourrait vendre des produits qui ne respectent pas la qualité promise, par exemple un livre en mauvais état ou tout simplement un produit qui n'est pas ce que l'acheteur croit acheter.</li>
             </ol>
         </section>
 
@@ -416,6 +546,9 @@
             <ol>
                 <li><strong>Rapidité du service</strong>: Affichage rapide des informations (&le; 1 secondes) et recherche et tri des produits rapides (&le; secondes)</li>
                 <li><strong>Facilité de navigation</strong>: L'interface utilisateur du service est compréhensible et facile à naviguer. Les utilisateurs vont pouvoir facilement accéder à toutes les fonctionnalités offertes sans chercher où elles se trouvent.</li>
+                <li><strong>Disponibilité du service</strong>: Les acheteurs et les revendeurs pourront profiter de UniShop 24 heures sur 24 et 7 jours sur 7. Cela implique que le service devra toujours être fonctionnel (&ge; 99.9% du temps).</li>
+                <li><strong>Portabilité</strong>: UniShop devra être accessible autant par un ordinateur que par un téléphone intelligent. Les utilisateurs peuvent ainsi profiter du service peu importe où ils se trouvent.</li>
+                <li><strong>Vitesse de livraison</strong>: Les produits devront être livrés dans un délai raisonnable (&le; 5 jours) pour que les acheteurs puissent avoir rapidement les produits qu'ils ont achetés et pour faciliter le processus d'envoi et la gestion d'inventaire.</li>
             </ol>
         </section>
 
