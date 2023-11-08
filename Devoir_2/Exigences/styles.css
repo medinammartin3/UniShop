@@ -1,0 +1,112 @@
+body{
+    background-color: #f6f5f3;
+    color: #3d3d3f;
+    font-family: monospace;
+    font-size: 20px;
+    line-height: 30px;
+
+}
+
+h1{
+    font-size: 60px;
+}
+
+h2{
+    font-size: 35px;
+    text-decoration: underline;
+    text-decoration-color: #7dce94;
+    text-underline-offset: 5px;
+}
+
+.notBold{
+    font-weight: normal;
+}
+
+hr{
+    border: none;
+    background-color: #7dce94;
+    height: 2px;
+}
+
+header{
+    margin-top: 60px;
+    text-align: center;
+}
+
+a:link, a:visited{
+    color: #3b7b4d;
+}
+
+a:hover{
+    color: #7dce94;
+}
+
+#membres{
+    margin-left: 20px;
+}
+
+#membres > li {
+    font-weight: bold;
+}
+
+#membres > li::marker {
+    content: '~ ';
+    font-size: 25px;
+}
+
+.info-membre > li{
+    list-style-type: circle;
+}
+
+section{
+    display: block;
+    text-align: justify;
+}
+
+table, th, td{
+    border: 2px solid;
+    padding: 10px;
+    border-collapse: collapse;
+}
+
+th{
+    text-align: center;
+}
+
+ol > li, .CU > li{
+    margin-top: 20px;
+}
+
+.CUs > li{
+    margin-top: 60px;
+}
+
+ul, .CUs, .CU{
+    margin-right: 70px;
+}
+
+ol{
+    margin-right: 70px;
+    margin-left: 40px;
+}
+
+footer > p{
+    text-align: center;
+    color: #3d3d3f;
+    font-size: 17px;
+    height: 10px;
+}
+
+footer{
+    margin-bottom: 45px;
+    margin-top: 30px;
+}
+
+.sousListes > li::marker{
+    content: '- ';
+    font-size: 20px;
+}
+
+img{
+    margin-left: 70px;
+}
