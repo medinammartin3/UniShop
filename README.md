@@ -28,8 +28,6 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
 Pour exécuter le projet, assurez-vous d'avoir un environnement de développement intégré (IDE) installé.
   Ouvrez l'IDE, importez le projet, puis localisez la classe (Main) et la méthode principale (main). 
   Ensuite, lancez l'exécution du programme en cliquant sur le bouton correspondant dans l'IDE.
-  
-
 
   
 ## Anonce importante ##
