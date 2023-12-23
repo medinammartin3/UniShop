@@ -1,1 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport - Devoir 2 IFT2255</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Entête -->
+    <header>
+        <h1>Rapport</h1>
+        <h2>Devoir 2 - IFT 2255</h2>
+        <h3><em>Automne 2023</em></h3>
+    </header>
 
+    <br><br>
+
+    <main>
+        <!-- Information de l'équipe -->
+        <section>
+            <h2>Information de l'équipe</h2>
+            <h3>Nom de l'équipe : <span class="notBold">Les trois mousquetaires</span></h3>
+            <a href="https://github.com/medinammartin3/Projet_IFT2255.git">Lien vers dépôt GitHub</a>
+            <h3>Membres de l'équipe : </h3>
+            <ul id="membres">
+                <li>Martin Medina</li>
+                    <ul class="info-membre">
+                        <li>Matricule : 20235219</li>
+                        <li>Courriel : martin.medina@umontreal.ca</li>
+                        <li>Temps mis : 35 heures</li>
+                    </ul>
+                    <br>
+                <li>Mandi Vigier</li>
+                    <ul class="info-membre">
+                        <li>Matricule : 20237155</li>
+                        <li>Courriel : mandi.teo.vigier@umontreal.ca</li>
+                        <li>Temps mis : 34 heures</li>
+                    </ul>
+                    <br>
+                <li>Étienne Mitchell-Bouchard</li>
+                    <ul class="info-membre">
+                        <li>Matricule : 20243430</li>
+                        <li>Courriel : etienne.mitchell-bouchard@umontreal.ca</li>
+                        <li>Temps mis : 36 heures</li>
+                    </ul>
+            </ul>
+        </section>
+
+        <br>
+
+        <!-- Distribution -->
+        <section>
+            <h2>Distribution des tâches</h2>
+            <table>
+                <tr>
+                    <th>Tâche</th>
+                    <th>Martin Medina</th>
+                    <th>Mandi Vigier</th>
+                    <th>Étienne Mitchell-Bouchard</th>
+                </tr>
+                <tr>
+                    <td>Analyse</td>
+                    <td>Réflexion + rédaction (33%)</td>
+                    <td>Réflexion + rédaction (33%)</td>
+                    <td>Réflexion + rédaction (33%)</td>
+                </tr>
+                <tr>
+                    <td>Diagrammes d'activités</td>
+                    <td>2 diagrammes (33%)</td>
+                    <td>2 diagrammes (33%)</td>
+                    <td>2 diagrammes (33%)</td>
+                </tr>
+                <tr>
+                    <td>Diagramme de classes</td>
+                    <td>Logique (30%)</td>
+                    <td>Logique + implémentation (40%)</td>
+                    <td>Logique (30%)</td>
+                </tr>
+                <tr>
+                    <td>Diagrammes de séquence</td>
+                    <td>2 diagrammes (40%)</td>
+                    <td>1 diagrammes (20%)</td>
+                    <td>2 diagrammes (40%)</td>
+                </tr>
+                <tr>
+                    <td>Prototype</td>
+                    <td>Logique + code (30%)</td>
+                    <td>Logique + code (30%)</td>
+                    <td>Logique + code (40%)</td>
+                </tr>
+            </table>
+        </section>
+
+        <br>
+
+        <!-- Annonce -->
+        <h2>Annonce de distribution du travail</h2>
+        <p> Nous assurons que les 3 coéquipiers ont fait un travail équivalent et
+            désirent avoir la même note.
+        </p>
+
+        <br>
+
+        <!-- Tâche 1 -->
+        <section>
+            <h2>Tâche 1 : <span class="notBold">Analyse</span></h2>
+            <p>
+                Pour mettre en opération le système UniShop, toutes les parties,
+                 y compris l'inventaire, les commandes et les utilisateurs, 
+                 seront informatisées. Les données seront stockées dans des 
+                 dossiers et dans des fichiers '.csv'. Aucun matériel spécialisé 
+                 ne sera nécessaire, seule une connexion Internet et un 
+                 ordinateur standard suffiront. Le système interagira avec 
+                 d'autres systèmes tels que le service postal pour la livraison 
+                 des colis et les services de paiement bancaire pour les 
+                 transactions. Les utilisateurs interagiront avec le système 
+                 UniShop via un navigateur web. Cependant, dans le contexte du devoir,
+                 ils interagiront avec la console. <em>(94 mots)</em>
+            </p>
+        </section>
+
+        <br>
+
+        <!-- Tâche 2 -->
+        <section>
+            <h2>Tâche 2 : <span class="notBold">Diagrammes d'activités UML</span></h2>
+            <h3>Diagramme principal (point d'entrée) :</h3>
+            <img style="width: 2000px;" src="Diagrammes/Activités/Principal.svg" alt="Diagramme d'activité UML - Principal">
+            <h3>Passer une commande :</h3>
+            <img src="Diagrammes/Activités/Passer une Commande.svg" alt="Diagramme d'activité UML - Passer une commande">
+            <h3>Évaluer un produit :</h3>
+            <img src="Diagrammes/Activités/Evaluer un produit.svg" alt="Diagramme d'activité UML - Évaluer un produit">
+            <h3>Retourner/échanger une commande :</h3>
+            <img style="width: 1300px;" src="Diagrammes/Activités/Retourner_échanger une commande.svg" alt="Diagramme d'activité UML - Retourner/échanger une commande">
+            <h3>Confirmer la réception d'une commande :</h3>
+            <img src="Diagrammes/Activités/Confirmer la réception d'une commande.svg" alt="Diagramme d'activité UML - Confirmer la réceptiond'une commande">
+            <h3>Offrir un produit à vendre :</h3>
+            <img src="Diagrammes/Activités/Offrir un produit à vendre.svg" alt="Diagramme d'activité UML - Offrir un produit à vendre">
+            <br>
+        </section>
+
+        <br>
+        
+        <!-- Tâche 3 -->
+        <section>
+            <h2>Tâche 3 : <span class="notBold">Diagramme de classes UML</span></h2>
+            <img style="width: 1900px;" src="Diagrammes/Classe.svg" alt="Diagramme de classe UML">
+        </section>
+
+        <br>
+
+        <!-- Tâche 4 -->
+        <section>
+            <h2>Tâche 4 : <span class="notBold">Diagrammes de séquence UML</span></h2>
+            <h3>Passer une commande :</h3>
+            <img style="width: 1300px;" src="Diagrammes/Séquence/Passer une commande.svg" alt="Diagramme de séquence UML - Passer une commande">
+            <h3>Évaluer un produit :</h3>
+            <img style="width: 1300px;" src="Diagrammes/Séquence/Évaluer un produit.svg" alt="Diagramme de séquence UML - Évaluer un produit">
+            <h3>Retourner/échanger une commande :</h3>
+            <img style="width: 1300px;" src="Diagrammes/Séquence/Retourner_échanger une commande.svg" alt="Diagramme de séquence UML - Retourner/échanger une commande">
+            <h3>Confirmer la réception d'une commande :</h3>
+            <img style="width: 1300px;" src="Diagrammes/Séquence/Confirmer la réception d'une commande.svg" alt="Diagramme de séquence UML - Confirmer la réceptiond'une commande">
+            <h3>Offrir un produit à vendre :</h3>
+            <img style="width: 1300px;" src="Diagrammes/Séquence/Offrir un produit à vendre.svg" alt="Diagramme de séquence UML - Offrir un produit à vendre">
+        </section>
+
+        <br>
+
+        <!-- Tâche 5 -->
+        <section>
+            <h2>Tâche 5 : <span class="notBold">Prototype</span></h2>
+            <p>Vous trouverez le code du projet et le fichier JAR dans le dossier <em>Implémentation</em> du dépôt GitHub du projet.</p>
+        </section>
+
+        <br>
+
+        <!-- GitHub Insights -->
+        <section>
+            <h2>Statistiques GitHub</h2>
+            <p>
+                On a fait l'erreur de ne pas avoir utilisé GitHub dès le début, donc à la fin on a fait le commit de tout le contenu.
+                <br>
+                Cependant, nous certifions avoir divisé le travail équitablement et nous désirons avoir tous la même note. 
+            </p>
+            <br>
+            <img style="width: 800px;" src="GitHub_Insight.png" alt="GitHub Insights">
+        </section>
+    </main>
+
+    <br>
+    <hr>
+
+    <footer>
+        <p>Ceci est la fin du Rapport du Devoir 2 du cours ITF2255</p>
+        <p><em>Cette page Web à été faite par : Martin Medina, Mandi Vigier et Étienne Mitchell-Bouchard</em></p>
+        <p><strong>&copy; Les trois mousquetaires</strong></p>
+    </footer>
+</body>
+</html>
