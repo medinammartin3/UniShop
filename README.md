@@ -3,7 +3,7 @@
 ## Manuel d'utilisation ##
 
 ### Titre ###
-UniShop
+**UniShop**
   
 ### Description ###
 UniShop, le logiciel ultime pour les étudiants, offre une expérience complète en permettant 
@@ -18,12 +18,17 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
 * **Revendeur**
   * *Nom d'utilisateur* :
   * *Mot de passe* : 
-
+  
 ### Comment installer ###
+* *Version Java* :
+* *Version Maven* :
+* *Librairies externes* :
+* Cloner ou téléchercher le projet depuis ce dépôt GitHub.
   
-
 ### Comment exécuter ###
-  
+Pour exécuter le projet, assurez-vous d'avoir un environnement de développement intégré (IDE) installé.
+  Ouvrez l'IDE, importez le projet, puis localisez la classe (Main) et la méthode principale (main). 
+  Ensuite, lancez l'exécution du programme en cliquant sur le bouton correspondant dans l'IDE.
   
   
 ## Anonce importante ##
