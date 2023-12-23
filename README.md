@@ -1,4 +1,4 @@
-# UniShop - Projet_IFT2255#
+# UniShop - Projet_IFT2255 #
 
 ## Manuel d'utilisation ##
 
