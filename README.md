@@ -1,10 +1,10 @@
-# Projet_IFT2255 - UniShop
+# Projet_IFT2255 - UniShop #
 
-#Manuel d'utilisation
+## Manuel d'utilisation ##
 
 
 
-#Anonce importante
+## Anonce importante ##
 
 Nous assurons que les 4 coéquipiers ont fait un travail équivalent et désirent avoir la même note.
 
