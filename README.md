@@ -39,7 +39,7 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
 ## Bonus ##
 Veuillez noter qu'on a implémenté le bonus de créer une action GitHub qui roulera vos tests unitaires 
   avec JUnit intégré à Maven à chaque commit pour assurer que rien n'est brisé.  
-  Vous trouverez l'implémentation dans : **.github/workflows/run-tests.yml**
+  * Vous trouverez l'implémentation dans : **.github/workflows/run-tests.yml**
 
   
 ## Anonce importante ##
