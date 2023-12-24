@@ -11,24 +11,29 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
   de revendeurs personnalisés font d'UniShop l'outil incontournable pour simplifier la vie étudiante.
   
 ### Données de départ ###
-* **Utilisateur**
-  * *Nom d'utilisateur* :
-  * *Mot de passe* : 
+* **Acheteur**
+  * *Nom d'utilisateur* : Acheteur1
+  * *Mot de passe* : 1
 * **Revendeur**
-  * *Nom d'utilisateur* :
-  * *Mot de passe* : 
+  * *Nom d'utilisateur* : Revendeur1
+  * *Mot de passe* : 1
   
 ### Comment installer ###
-* *Version Java* :
-* *Version Maven* :
-* *Librairies externes* :
-* Cloner ou téléchercher le projet depuis ce dépôt GitHub.
+* *Version Java* : OpenJDK version 20
+* *Version Maven* : 3.8.1
+* *Librairies externes* : Aucune
+* Cloner ou télécharger le projet depuis ce dépôt GitHub.
+* Vous pouvez aussi simplement télécharger le fichier "unishop.jar".
   
 ### Comment exécuter ###
-Pour exécuter le projet, assurez-vous d'avoir un environnement de développement intégré (IDE) installé.
+* *Si vous avez téléchargé le projet au complet :*
+  * Pour exécuter le projet, assurez-vous d'avoir un environnement de développement intégré (IDE) installé.
   Ouvrez l'IDE, importez le projet, puis localisez la classe (Main) et la méthode principale (main). 
   Ensuite, lancez l'exécution du programme en cliquant sur le bouton correspondant dans l'IDE.
-
+* *Si vous avez téléchargé le fichier .jar :*
+  * Ouvrez la console de votre ordinateur, ensuite écrivez la commande suivante : "java -jar unishop.jar".
+  Assurez-vous de bien être dans le dossier dans lequel vous avez placé votre fichier .jar (pour naviguer dans votre console utilisez la commande "cd").
+  
   
 ## Anonce importante ##
 
