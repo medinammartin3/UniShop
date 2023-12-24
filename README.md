@@ -2,7 +2,7 @@
 
 ## Manuel d'utilisation ##
 
-### Titre: UniShop###
+### Titre: UniShop ###
   
 ### Description ###
 UniShop, le logiciel ultime pour les étudiants, offre une expérience complète en permettant 
