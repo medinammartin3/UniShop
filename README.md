@@ -8,7 +8,7 @@
 UniShop, le logiciel ultime pour les étudiants, offre une expérience complète en permettant 
   aux utilisateurs de trouver et commander facilement des produits essentiels pour leurs études. 
   Livraison à domicile, évaluations et commentaires, découvertes d'articles recommandés et recherche
-  de revendeurs personnalisés font d'UniShop l'outil incontournable pour simplifier la vie estudiantine.
+  de revendeurs personnalisés font d'UniShop l'outil incontournable pour simplifier la vie étudiante.
   
 ### Données de départ ###
 * **Utilisateur**
