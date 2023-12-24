@@ -35,6 +35,12 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
   * Ouvrez la console de votre ordinateur, ensuite écrivez la commande suivante : "java -jar unishop.jar".
   Assurez-vous de bien être dans le dossier dans lequel vous avez placé votre fichier .jar (pour naviguer dans votre console utilisez la commande "cd").
   
+
+## Bonus ##
+Veuillez noter qu'on a implémenté le bonus de créer une action GitHub qui roulera vos tests unitaires 
+  avec JUnit intégré à Maven à chaque commit pour assurer que rien n'est brisé.
+  Vous trouverez l'implémentation dans : **.github/workflows/run-tests.yml**
+
   
 ## Anonce importante ##
 
