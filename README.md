@@ -21,7 +21,8 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
 ### Comment installer ###
 * *Version Java* : OpenJDK version 20
 * *Version Maven* : 3.8.1
-* *Librairies externes* : Aucune
+* *Librairies externes* : JUnit (junit-jupiter) ~ version 5.10.0
+* *Plugins* : maven-surefire-plugin ~ version 3.2.2
 * Cloner ou télécharger le projet depuis ce dépôt GitHub.
 * Vous pouvez aussi simplement télécharger le fichier "unishop.jar".
   
