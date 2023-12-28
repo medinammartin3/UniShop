@@ -1,0 +1,13 @@
+1,,1111111111,1 rue Revendeur1,2233.1,10
+Acheteur1
+Livres et manuels,Ressources d'apprentissage,Articles de papeterie,Matériel informatique
+0,1,2,3
+0
+6,Acheteur1,Revendeur1,Produit1,1
+6,Acheteur2,Revendeur1,Produit2,1
+6,Acheteur3,Revendeur1,Produit3,2
+6,Acheteur3,Revendeur1,Produit3,2
+6,Acheteur4,Revendeur1,Produit4,3
+8,Acheteur1,Revendeur1,Produit1,-1
+7,Acheteur1,Revendeur1,Produit1,-1
+7,Acheteur1,Revendeur1,Produit1,-1
