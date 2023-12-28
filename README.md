@@ -24,7 +24,7 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
 * **Librairies externes** : JUnit (junit-jupiter) ~ version 5.10.0
 * **Plugins** : maven-surefire-plugin ~ version 3.2.2
 * Cloner ou télécharger le projet depuis ce dépôt GitHub.
-* Vous pouvez aussi simplement télécharger le fichier "unishop.jar".
+* Vous pouvez aussi simplement télécharger le fichier "UniShop.jar".
   
 ### Comment exécuter ###
 * **Si vous avez téléchargé le projet au complet :**
@@ -32,7 +32,7 @@ UniShop, le logiciel ultime pour les étudiants, offre une expérience complète
   Ouvrez l'IDE, importez le projet, puis localisez la classe (Main) et la méthode principale (main). 
   Ensuite, lancez l'exécution du programme en cliquant sur le bouton correspondant dans l'IDE.
 * **Si vous avez téléchargé le fichier .jar :**
-  * Ouvrez la console de votre ordinateur, ensuite écrivez la commande suivante : "java -jar unishop.jar".
+  * Ouvrez la console de votre ordinateur, ensuite écrivez la commande suivante : "java -jar UniShop.jar".
   Assurez-vous de bien être dans le dossier dans lequel vous avez placé votre fichier .jar (pour naviguer dans votre console utilisez la commande "cd").
   
 
