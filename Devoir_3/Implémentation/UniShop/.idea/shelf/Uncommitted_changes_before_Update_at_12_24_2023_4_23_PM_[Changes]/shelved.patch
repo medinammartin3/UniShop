@@ -1,0 +1,895 @@
+Index: src/main/java/unishop/Evaluation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop;\r\n\r\npublic class Evaluation {\r\n    final String nomAcheteur;\r\n    final int note;\r\n    private final String commentaire;\r\n\r\n    public Evaluation(String nomAcheteur, int note, String commentaire) {\r\n        this.nomAcheteur = nomAcheteur;\r\n        this.note = note;\r\n        this.commentaire = commentaire;\r\n    }\r\n    public String getSaveFormat() {\r\n        return nomAcheteur + \",\" + note + \",\" + commentaire;\r\n    }\r\n    public String getDisplayFormat() {\r\n        return \"Acheteur: \" + nomAcheteur + \"\\nNote sur 5: \" + note + \"\\n\" + commentaire;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/Evaluation.java b/src/main/java/unishop/Evaluation.java
+--- a/src/main/java/unishop/Evaluation.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/Evaluation.java	(date 1703451624007)
+@@ -4,16 +4,42 @@
+     final String nomAcheteur;
+     final int note;
+     private final String commentaire;
++    private int likes;
++    private boolean estInapropprie;
+ 
+-    public Evaluation(String nomAcheteur, int note, String commentaire) {
++    public Evaluation(String nomAcheteur, int note, String commentaire, int likes, boolean estInapropprie) {
+         this.nomAcheteur = nomAcheteur;
+         this.note = note;
+         this.commentaire = commentaire;
++        this.likes = likes;
++        this.estInapropprie = estInapropprie;
++    }
++    public String getSaveFormatProduit() {
++        return nomAcheteur + "," + note + "," + commentaire + "," + likes + "," + estInapropprie;
+     }
+-    public String getSaveFormat() {
+-        return nomAcheteur + "," + note + "," + commentaire;
++    public String getSaveFormatAcheteur() {
++        return note + "," + commentaire + "," + likes + "," + estInapropprie;
+     }
++
++    public int getLikes() {
++        return likes;
++    }
++
+     public String getDisplayFormat() {
+-        return "Acheteur: " + nomAcheteur + "\nNote sur 5: " + note + "\n" + commentaire;
++        return "Acheteur: " + nomAcheteur + "\nNote sur 5: " + note + "\n" + commentaire +
++                "\nNombre de likes: " + likes + (estInapropprie ? "\nSignalée comme inappropriée" : "");
++    }
++    public void ajouterLike() {
++        ++likes;
++    }
++    public boolean isEqual(Evaluation e) {
++        return e.note == this.note && e.commentaire.equals(this.commentaire) && e.likes == this.likes;
++    }
++    public boolean signaler() {
++        if (this.estInapropprie)
++            return false;
++        else {
++            return this.estInapropprie = true;
++        }
+     }
+ }
+Index: src/main/java/unishop/ControleurInvite.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop;\r\n\r\nimport unishop.Users.Acheteur;\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\n\r\nimport static unishop.Main.*;\r\n\r\npublic class ControleurInvite {\r\n    static short choix;\r\n    static void menuInvite(){\r\n        while (true) {\r\n            System.out.println(\"\\nVoici le menu Invité:\");\r\n            choix = selectionChoix(new String[]{\"Trouver un acheteur\", \"Trouver un revendeur\", \"Trouver un produit\",\r\n                    \"Retourner au menu principal\"});\r\n            switch (choix) {\r\n                case 1 -> trouverAcheteur();\r\n                case 2 -> trouverRevendeur();\r\n                case 3 -> trouverProduits();\r\n                case 4 -> {\r\n                    return;\r\n                }\r\n            }\r\n        }\r\n    }\r\n    static void trouverAcheteur() {\r\n        try {\r\n            while (true) {\r\n                System.out.print(\"\\nEntrer le nom d'un acheteur (N'entrez rien pour la liste de tous les acheteurs): \");\r\n                Acheteur acheteur;\r\n                String a = br.readLine();\r\n                ArrayList<String> as = new ArrayList<>(fichiersDansDossier(USERS_PATH + ACHETEURS));\r\n                as.add(\"Faire une nouvelle recherche\");\r\n                as.add(\"Retourner au menu\");\r\n                if (a.isEmpty()) {\r\n                    System.out.println(\"Sélectionnez une option: \");\r\n                    choix = selectionChoix(as.toArray());\r\n                    if (choix == as.size() - 2)\r\n                        continue;\r\n                    else if (choix == as.size() - 1)\r\n                        return;\r\n                    acheteur = initialiserAcheteur(as.get(choix));\r\n                }\r\n                else {\r\n                    if (as.contains(a)) {\r\n                        acheteur = initialiserAcheteur(a);\r\n                    }\r\n                    else {\r\n                        System.out.println(\"\\nCet acheteur n'existe pas! Veuillez réessayer.\");\r\n                        continue;\r\n                    }\r\n                }\r\n                while (true) {\r\n                    System.out.println(\"\\nVoici les informations sur \" + acheteur.getUsername() + \": \" +\r\n                            acheteur.afficherMetriques());\r\n                    System.out.println(\"\\nQue voulez-vous faire ensuite?\");\r\n                    choix = selectionChoix(new String[] {\"Voir les followers\", \"Voir les suivis\", \"Faire une autre recherche\",\r\n                            \"Retourner au menu principal\"});\r\n                    if (choix == 3)\r\n                        break;\r\n                    else if (choix == 4)\r\n                        return;\r\n                    if (choix == 1)\r\n                        as = acheteur.getFollowers();\r\n                    else\r\n                        as = acheteur.getSuivis();\r\n                    if (as.isEmpty()) {\r\n                        if (choix == 1)\r\n                            System.out.println(\"\\n\" + acheteur.getUsername() + \" n'a aucun follower!\");\r\n                        else\r\n                            System.out.println(\"\\n\" + acheteur.getUsername() + \" ne suit aucun acheteur!\");\r\n                        continue;\r\n                    }\r\n                    System.out.println(\"\\nChoississez un acheteur: \");\r\n                    choix = selectionChoix(as.toArray());\r\n                    acheteur = initialiserAcheteur(as.get(choix));\r\n                }\r\n\r\n            }\r\n\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n    }\r\n    static void trouverProduits() {\r\n\r\n    }\r\n    static void trouverRevendeur() {\r\n\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/ControleurInvite.java b/src/main/java/unishop/ControleurInvite.java
+--- a/src/main/java/unishop/ControleurInvite.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/ControleurInvite.java	(date 1703438954272)
+@@ -1,9 +1,11 @@
+ package unishop;
+ 
++import unishop.Categories.Categorie;
+ import unishop.Users.Acheteur;
+ 
+ import java.io.IOException;
+ import java.util.ArrayList;
++import java.util.List;
+ 
+ import static unishop.Main.*;
+ 
+@@ -29,28 +31,26 @@
+             while (true) {
+                 System.out.print("\nEntrer le nom d'un acheteur (N'entrez rien pour la liste de tous les acheteurs): ");
+                 Acheteur acheteur;
+-                String a = br.readLine();
++                String aEntre = br.readLine();
+                 ArrayList<String> as = new ArrayList<>(fichiersDansDossier(USERS_PATH + ACHETEURS));
+-                as.add("Faire une nouvelle recherche");
+-                as.add("Retourner au menu");
+-                if (a.isEmpty()) {
+-                    System.out.println("Sélectionnez une option: ");
+-                    choix = selectionChoix(as.toArray());
+-                    if (choix == as.size() - 2)
+-                        continue;
+-                    else if (choix == as.size() - 1)
+-                        return;
+-                    acheteur = initialiserAcheteur(as.get(choix));
+-                }
+-                else {
+-                    if (as.contains(a)) {
+-                        acheteur = initialiserAcheteur(a);
+-                    }
+-                    else {
+-                        System.out.println("\nCet acheteur n'existe pas! Veuillez réessayer.");
+-                        continue;
+-                    }
+-                }
++                ArrayList<String> aSelect = new ArrayList<>();
++                for (String a : fichiersDansDossier(USERS_PATH + ACHETEURS)) {
++                    if (a.contains(aEntre))
++                        aSelect.add(a);
++                }
++                if (aSelect.isEmpty()) {
++                    System.out.println("Aucun acheteur ne correspond à cette recherche! Veuillez réessayer.");
++                    continue;
++                }
++                aSelect.add("Faire une nouvelle recherche");
++                aSelect.add("Retourner au menu");
++                System.out.println("Sélectionnez une option: ");
++                choix = selectionChoix(aSelect.toArray());
++                if (choix == aSelect.size() - 2)
++                    continue;
++                else if (choix == aSelect.size() - 1)
++                    return;
++                acheteur = initialiserAcheteur(aSelect.get(choix - 1));
+                 while (true) {
+                     System.out.println("\nVoici les informations sur " + acheteur.getUsername() + ": " +
+                             acheteur.afficherMetriques());
+@@ -62,10 +62,10 @@
+                     else if (choix == 4)
+                         return;
+                     if (choix == 1)
+-                        as = acheteur.getFollowers();
++                        aSelect = acheteur.getFollowers();
+                     else
+-                        as = acheteur.getSuivis();
+-                    if (as.isEmpty()) {
++                        aSelect = acheteur.getSuivis();
++                    if (aSelect.isEmpty()) {
+                         if (choix == 1)
+                             System.out.println("\n" + acheteur.getUsername() + " n'a aucun follower!");
+                         else
+@@ -73,8 +73,8 @@
+                         continue;
+                     }
+                     System.out.println("\nChoississez un acheteur: ");
+-                    choix = selectionChoix(as.toArray());
+-                    acheteur = initialiserAcheteur(as.get(choix));
++                    choix = selectionChoix(aSelect.toArray());
++                    acheteur = initialiserAcheteur(aSelect.get(choix));
+                 }
+ 
+             }
+@@ -85,7 +85,134 @@
+ 
+     }
+     static void trouverProduits() {
++        try {
++            while (true) {
++                System.out.println("\nQuel type de recherche voulez-vous faire?");
++                ArrayList<String> pSelect = new ArrayList<>();
++                List<String> produits = fichiersDansDossier(PRODUITS_PATH);
++                boolean estRecherche = 1 == selectionChoix(new String[]{"Recherche par mots-clés",
++                        "Recherche par filtre"});
++                String recherche = "";
++                short choixCat = 0;
++                boolean estPrixPlusGrand = false;
++                float floatDemande = 0;
++                int nbLikesDemande = 0;
++                if (estRecherche) {
++                    System.out.print("Entrez votre recherche: ");
++                    recherche = br.readLine();
++                } else {
++                    System.out.println("Choisissez votre type de filtre: ");
++                    choix = selectionChoix(new String[]{"Catégorie", "Prix", "Popularité", "Note moyenne",
++                            "Promotion"});
++                    switch (choix) {
++                        case 1 -> {
++                            System.out.println("Choisissez une catégorie: ");
++                            choixCat = selectionChoix(Categorie.categories);
++                            --choixCat;
++                        }
++                        case 2 -> {
++                            System.out.println("Filtrer par plus petit ou plus grand?");
++                            estPrixPlusGrand = 1 == selectionChoix(new String[]{"Plus petit", "Plus grand"});
++                            System.out.print("Entrez un prix: ");
++                            floatDemande = demanderFloat("un prix");
++                        }
++                        case 3 -> {
++                            System.out.print("Entrez un nombre minimum de likes: ");
++                            nbLikesDemande = demanderIntPositif("un nombre de likes");
++                        }
++                        case 4 -> {
++                            System.out.print("Entrez une note moyenne minimale: ");
++                            floatDemande = demanderFloat("une note");
++                        }
++                    }
++                }
+ 
++                for (String p : produits) {
++                    String[] contenu = lireFichierEnEntier(PRODUITS_PATH + p);
++                    String[] infos = contenu[0].split(",");
++                    String[] cat = contenu[3].split(",");
++                    String produitPreview = String.join(", ", infos[1],
++                            Categorie.getCat(Integer.parseInt(cat[0])), "Revendeur: " + infos[0]);
++                    if (estRecherche) {
++                        if ((infos[1] + infos[2] + cat[1] + cat[2] + cat[3]).contains(recherche))
++                            pSelect.add(produitPreview);
++                    } else {
++                        switch (choix) {
++                            case 1 -> {
++                                short pCat = Short.parseShort(cat[0]);
++                                if (choixCat == pCat)
++                                    pSelect.add(produitPreview);
++                            }
++                            case 2 -> {
++                                float prix = Float.parseFloat(infos[3]);
++                                if (estPrixPlusGrand) {
++                                    if (prix <= floatDemande)
++                                        pSelect.add(produitPreview);
++                                } else {
++                                    if (prix >= floatDemande)
++                                        pSelect.add(produitPreview);
++                                }
++                            }
++                            case 3 -> {
++                                String[] nbLikesS = contenu[4].split(",");
++                                int nbLikes = nbLikesS.length;
++                                if (nbLikesS[0].isEmpty())
++                                    nbLikes = 0;
++                                if (nbLikes >= nbLikesDemande)
++                                    pSelect.add(produitPreview);
++                            }
++                            case 4 -> {
++                                float noteMoyenne = Float.parseFloat(infos[6]);
++                                if (noteMoyenne >= floatDemande)
++                                    pSelect.add(produitPreview);
++                            }
++                            case 5 -> {
++                                if (Integer.parseInt(infos[5]) != 0)
++                                    pSelect.add(produitPreview);
++                            }
++                        }
++                    }
++                }
++                if (pSelect.isEmpty()) {
++                    System.out.println("Aucun résultat pour cette recherche. Veuillez réessayer.");
++                    continue;
++                }
++                pSelect.add("Faire une nouvelle recherche");
++                pSelect.add("Retourner au menu principal");
++                while (true) {
++                    System.out.println("\nChoisissez un produit: ");
++                    choix = selectionChoix(pSelect.toArray());
++                    if (choix == pSelect.size() - 1)
++                        break;
++                    else if (choix == pSelect.size())
++                        return;
++                    Produit p = initialiserProduit(pSelect.get(choix - 1).split(",")[0]);
++                    System.out.println("\n" + p.getFormatDisplay());
++                    while (true) {
++                        System.out.println("\nQue voulez-vous faire ensuite?");
++                        choix = selectionChoix(new String[]{"Regarder les évaluations", "Voir les likes",
++                                "Retourner au résultat de la recherche"});
++                        if (choix == 3)
++                            break;
++                        switch (choix) {
++                            case 1 -> System.out.println("\n" + p.getEvaluationsDisplay());
++                            case 2 -> {
++                                ArrayList<String> ar = p.voirLikes();
++                                String[] as = ar.toArray(new String[0]);
++                                if (as.length == 1)
++                                    System.out.println("\nCe produit n'a aucun likes.");
++                                else
++                                    System.out.println("\nVoici la liste des likes:\n" + String.join("\n", as));
++                            }
++                        }
++                    }
++                }
++            }
++        }
++        catch (IOException e) {
++            e.printStackTrace();
++            System.out.println("Quelque chose s'est mal passé. Veuillez réessayer.");
++        }
+     }
+     static void trouverRevendeur() {
+ 
+Index: src/main/java/unishop/ControleurAcheteur.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop;\r\n\r\nimport unishop.Categories.Categorie;\r\nimport unishop.Users.Acheteur;\r\nimport unishop.Users.Revendeur;\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport static unishop.Main.*;\r\n\r\npublic class ControleurAcheteur {\r\n    private static short choix;\r\n    private static Acheteur acheteur;\r\n    static void menuAcheteur(Acheteur a) {\r\n        acheteur = a;\r\n        while (true) {\r\n            System.out.println(\"\\nVoici le menu Acheteur:\");\r\n            choix = selectionChoix(new String[]{\"Accéder aux commandes\", \"Accéder au panier d'achat\", \"Voir les billets\",\r\n                    \"Changer les informations du profil\", \"Rechercher un produit\",\r\n                    \"Rechercher un revendeur\", \"Gérer les acheteur suivis\",\r\n                    \"Afficher les métriques\", \"Voir les notifications\", \"Se déconnecter\"});\r\n            switch (choix) {\r\n                case 1 -> gererCommandesAcheteur();\r\n                case 2 -> allerAuPanier();\r\n                case 3 -> gererBilletsAcheteur();\r\n                case 4 -> changerInformations();\r\n                case 5 -> {\r\n                    short c = rechercherProduits();\r\n                    while (c == 1)\r\n                        c = rechercherProduits();\r\n                    if (c == 2)\r\n                        allerAuPanier();\r\n                }\r\n                case 6 -> rechercherRevendeur();\r\n                case 7 -> gererAcheteursSuivis();\r\n                case 8 -> System.out.println(acheteur.afficherMetriques());\r\n                case 9 -> System.out.println(afficherNotifications());\r\n                case 10 -> {\r\n                    return;\r\n                }\r\n            }\r\n        }\r\n    }\r\n    static short rechercherProduits() {\r\n        System.out.println(\"\\nQuel type de recherche voulez-vous faire?\");\r\n        try {\r\n            ArrayList<String> pSelect = new ArrayList<>();\r\n            List<String> produits = fichiersDansDossier(PRODUITS_PATH);\r\n            boolean estRecherche = 1 == selectionChoix(new String[] {\"Recherche par mots-clés\",\r\n                    \"Recherche par filtre\"});\r\n            String recherche = \"\";\r\n            short choixCat = 0;\r\n            boolean estPrixPlusGrand = false;\r\n            float floatDemande = 0;\r\n            int nbLikesDemande = 0;\r\n            if (estRecherche) {\r\n                System.out.print(\"Entrez votre recherche: \");\r\n                recherche = br.readLine();\r\n            }\r\n            else {\r\n                System.out.println(\"Choisissez votre type de filtre: \");\r\n                choix = selectionChoix(new String[] {\"Catégorie\", \"Prix\", \"Popularité\", \"Note moyenne\",\r\n                        \"Promotion\"});\r\n                switch (choix) {\r\n                    case 1 -> {\r\n                        System.out.println(\"Choisissez une catégorie: \");\r\n                        choixCat = selectionChoix(Categorie.categories);\r\n                        --choixCat;\r\n                    }\r\n                    case 2 -> {\r\n                        System.out.println(\"Filtrer par plus petit ou plus grand?\");\r\n                        estPrixPlusGrand = 1 == selectionChoix(new String[]{\"Plus petit\", \"Plus grand\"});\r\n                        System.out.print(\"Entrez un prix: \");\r\n                        floatDemande = demanderFloat(\"un prix\");\r\n                    }\r\n                    case 3 -> {\r\n                        System.out.print(\"Entrez un nombre minimum de likes: \");\r\n                        nbLikesDemande = demanderIntPositif(\"un nombre de likes\");\r\n                    }\r\n                    case 4 -> {\r\n                        System.out.print(\"Entrez une note moyenne minimale: \");\r\n                        floatDemande = demanderFloat(\"une note\");\r\n                    }\r\n                }\r\n            }\r\n\r\n            for(String p : produits) {\r\n                String[] contenu = lireFichierEnEntier(PRODUITS_PATH + p);\r\n                String[] infos = contenu[0].split(\",\");\r\n                String[] cat = contenu[3].split(\",\");\r\n                String produitPreview = String.join(\", \", infos[1],\r\n                        Categorie.getCat(Integer.parseInt(cat[0])), \"Revendeur: \" + infos[0]);\r\n                if (estRecherche) {\r\n                    if ((infos[1] + infos[2] + cat[1] + cat[2] + cat[3]).contains(recherche))\r\n                        pSelect.add(produitPreview);\r\n                }\r\n                else {\r\n                    switch (choix) {\r\n                        case 1 -> {\r\n                            short pCat = Short.parseShort(cat[0]);\r\n                            if (choixCat == pCat)\r\n                                pSelect.add(produitPreview);\r\n                        }\r\n                        case 2 -> {\r\n                            float prix = Float.parseFloat(infos[3]);\r\n                            if (estPrixPlusGrand) {\r\n                                if (prix <= floatDemande)\r\n                                    pSelect.add(produitPreview);\r\n                            } else {\r\n                                if (prix >= floatDemande)\r\n                                    pSelect.add(produitPreview);\r\n                            }\r\n                        }\r\n                        case 3 -> {\r\n                            String[] nbLikesS = contenu[4].split(\",\");\r\n                            int nbLikes = nbLikesS.length;\r\n                            if (nbLikesS[0].isEmpty())\r\n                                nbLikes = 0;\r\n                            if (nbLikes >= nbLikesDemande)\r\n                                pSelect.add(produitPreview);\r\n                        }\r\n                        case 4 -> {\r\n                            float noteMoyenne = Float.parseFloat(infos[6]);\r\n                            if (noteMoyenne >= floatDemande)\r\n                                pSelect.add(produitPreview);\r\n                        }\r\n                        case 5 -> {\r\n                            if (Integer.parseInt(infos[5]) != 0)\r\n                                pSelect.add(produitPreview);\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n            if (pSelect.isEmpty()) {\r\n                System.out.println(\"Aucun résultat pour cette recherche. Veuillez réessayer.\");\r\n                return 1;\r\n            }\r\n            pSelect.add(\"Faire une nouvelle recherche\");\r\n            pSelect.add(\"Retourner au menu acheteur\");\r\n            while (true) {\r\n                System.out.println(\"\\nChoisissez un produit: \");\r\n                choix = selectionChoix(pSelect.toArray());\r\n                if (choix == pSelect.size() - 1)\r\n                    return 1;\r\n                else if (choix == pSelect.size())\r\n                    return 0;\r\n                Produit p = initialiserProduit(pSelect.get(choix - 1).split(\",\")[0]);\r\n                System.out.println(\"\\n\" + p.getFormatDisplay());\r\n                while (true) {\r\n                    System.out.println(\"\\nQue voulez-vous faire ensuite?\");\r\n                    choix = selectionChoix(new String[] {\"Liker le produit\", \"Ajouter le produit au panier\",\r\n                            \"Regarder les évaluations\", \"Écrire une évaluation\", \"Voir les likes\",\r\n                            \"Retourner au résultat de la recherche\" });\r\n                    if (choix == 6)\r\n                        break;\r\n                    switch (choix) {\r\n                        case 1 -> System.out.println(\"\\n\" + p.liker(acheteur.getUsername()));\r\n                        case 2 -> {\r\n                            if (p.getQuantite() == 0) {\r\n                                System.out.println(\"\\nLe produit \" + p.titre + \" doit être restocké.\");\r\n                                continue;\r\n                            }\r\n                            acheteur.panier.addProduit(p);\r\n                            System.out.println(\"\\nVous avez ajouté \" + p.titre + \" au panier!\");\r\n                            System.out.println(\"\\nVoulez-vous aller au panier?\");\r\n                            if (1 == selectionChoix(new String[] {\"Oui\", \"Non\"}))\r\n                                return 2;\r\n                        }\r\n                        case 3 -> System.out.println(\"\\n\" + p.getEvaluationsDisplay());\r\n                        case 4 -> {\r\n                            if (acheteur.aAcheteProduit(p.titre)) {\r\n                                ecrireEvaluation(p);\r\n                            }\r\n                            else {\r\n                                System.out.println(\"\\nVous devez acheter ce produit avant de l'évaluer!\");\r\n                            }\r\n                        }\r\n                        case 5 -> {\r\n                            ArrayList<String> ar = p.voirLikes();\r\n                            ar.add(\"Retourner au produit\");\r\n                            String[] as = ar.toArray(new String[0]);\r\n                            if (as.length == 1) {\r\n                                System.out.println(\"\\nCe produit n'a aucun likes.\");\r\n                            }\r\n                            else {\r\n                                System.out.println(\"\\nChoisir un acheteur à suivre: \");\r\n                                short c = selectionChoix(as);\r\n                                if (c == as.length)\r\n                                    continue;\r\n                                System.out.println(\"\\n\" + acheteur.suivre(p.getLike(c - 1)));\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n        catch (IOException e) {\r\n            e.printStackTrace();\r\n            System.out.println(\"Quelque chose s'est mal passé. Veuillez réessayer.\");\r\n            rechercherProduits();\r\n        }\r\n        return 0;\r\n\r\n    }\r\n    static void gererCommandesAcheteur() {\r\n        System.out.println(\"\\nChoisissez une commande: \");\r\n        ArrayList<Commande> cmds = acheteur.getCommandes();\r\n        String[] cs = new String[cmds.size() + 1];\r\n        for (int i = 0; i < cmds.size(); ++i) {\r\n            cs[i] = cmds.get(i).getMenuDisplay();\r\n        }\r\n        cs[cmds.size()] = \"Retourner au menu\";\r\n        choix = selectionChoix(cs);\r\n        if (choix == cs.length)\r\n            return;\r\n        Commande cmd = cmds.get(choix - 1);\r\n        System.out.println(\"\\nCommande #\" + cmd.getId());\r\n        System.out.println(cmd.afficher());\r\n        System.out.println(\"Votre commande est \" + cmd.getEtat() + \".\");\r\n        while (true) {\r\n            System.out.println(\"\\nChoisissez une action: \");\r\n            choix = selectionChoix(new String[]{\"Confirmer la livraison\", \"Retourner un produit\", \"Évaluer un produit\",\r\n                    \"Retourner au menu\"});\r\n            switch (choix) {\r\n                case 1 -> {\r\n                    switch (cmd.confirmerLivraison()) {\r\n                        case 0 -> {\r\n                            System.out.println(\"\\nL'état de votre commande a été changé avec succès!\");\r\n                            cmd.saveAfter(USERS_PATH + ACHETEURS + acheteur.getUsername() + \"/Commandes/\");\r\n                            //TODO Update commande revendeur\r\n                        }\r\n                        case 1 -> System.out.println(\"\\nVotre commande est toujours en production.\");\r\n                        case 2 -> System.out.println(\"\\nVous avez déjà confirmé la livraison de cette commande!\");\r\n\r\n                    }\r\n                }\r\n                case 2 -> {\r\n                    Produit p = cmd.getChoixProduit(true);\r\n                    if (p == null)\r\n                        continue;\r\n                    else if (acheteur.billetExiste(p.getId())) {\r\n                        System.out.println(\"\\nVous avez déjà fait un billet pour ce produit!\");\r\n                        continue;\r\n                    }\r\n                    System.out.print(\"Quel est le problème avec ce produit? \");\r\n                    try {\r\n                        String a = br.readLine();\r\n                        System.out.println(\"Voulez-vous effectuer un retour ou un échange?\");\r\n                        boolean estRetour = 1 == selectionChoix(new String[] {\"Retour\", \"Échange\"});\r\n                        Revendeur r = initialiserRevendeur(p.nomReven);\r\n                        String produitRempla = \"\";\r\n                        if (!estRetour) {\r\n                            System.out.println(\"Choisissez un produit parmi ceux offert par le revendeur: \");\r\n                            produitRempla = r.getProduitAvecChoix().titre;\r\n                        }\r\n                        Billet b = new Billet(p.getId(), acheteur.getUsername(), p.titre, a, estRetour, false,\r\n                                \"\", produitRempla, false);\r\n                        acheteur.addBillet(b);\r\n                        r.addBillet(b);\r\n                        //TODO créer nouvelle commande pour échange\r\n                        System.out.println(\"\\nVotre demande \" + (b.estRetour ? \"de retour\" : \"d'échange\") + \" a été \" +\r\n                                \"traitée avec succès!\");\r\n                        System.out.println(\"Votre ID pour ce billet est: \" + p.getId());\r\n\r\n                    } catch (IOException e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                }\r\n                case 3 -> {\r\n                    Produit p = cmd.getChoixProduit(true);\r\n                    if (p == null)\r\n                        continue;\r\n                    ecrireEvaluation(p);\r\n                }\r\n                case 4 -> {\r\n                    return;\r\n                }\r\n            }\r\n        }\r\n    }\r\n    static void allerAuPanier() {\r\n        if (acheteur.panier.estVide()) {\r\n            System.out.println(\"\\nVotre panier est vide!\");\r\n            return;\r\n        }\r\n\r\n        System.out.println(\"\\nVoici votre panier:\");\r\n        System.out.println(acheteur.panier.afficher());\r\n        System.out.println(\"\\nChoisissez une action: \");\r\n        choix = selectionChoix(new String[] {\"Enlever un produit\", \"Passer la commande\", \"Retourner au menu\"});\r\n        switch (choix) {\r\n            case 1 -> {\r\n                Produit p = acheteur.panier.getChoixProduit(false);\r\n                acheteur.panier.removeProduit(p);\r\n                System.out.println(\"\\nVous avez enlevé \" + p.titre + \" du panier.\");\r\n                allerAuPanier();\r\n            }\r\n            case 2 -> {\r\n                try {\r\n                    System.out.println(\"Voulez-vous utiliser la même adresse que votre compte?\");\r\n                    String adresse = acheteur.getAddress();\r\n                    if (2 == selectionChoix(new String[] {\"Oui\", \"Non\"})) {\r\n                        System.out.print(\"Entrez une nouvelle adresse: \");\r\n                        adresse = br.readLine();\r\n                    }\r\n                    Commande c = acheteur.panier.passerCommande(USERS_PATH + ACHETEURS +\r\n                            acheteur.getUsername() + \"/Commandes\", adresse);\r\n                    acheteur.ajouterCommande(c.copy());\r\n                    acheteur.panier.vider();\r\n                    System.out.println(\"\\nVotre commande a été passée avec succès!\");\r\n                    System.out.println(\"Votre identifiant de commanque unique est: \" + c.getId());\r\n                }\r\n                catch (IOException e) {\r\n                    e.printStackTrace();\r\n                }\r\n\r\n            }\r\n        }\r\n    }\r\n    static void gererBilletsAcheteur() {\r\n        ArrayList<Billet> ba = acheteur.getBillets();\r\n        if (ba.isEmpty()) {\r\n            System.out.println(\"\\nVous n'avez aucun billet!\");\r\n            return;\r\n        }\r\n        while (true) {\r\n            System.out.println(\"\\nChoissisez un billet: \");\r\n            String[] bs = new String[ba.size() + 1];\r\n            for(int i = 0; i < ba.size(); ++i) {\r\n                bs[i] = ba.get(i).afficherMenu();\r\n            }\r\n            bs[bs.length - 1] = \"Retour au menu\";\r\n            choix = selectionChoix(bs);\r\n            if (choix == bs.length)\r\n                return;\r\n            Billet b = ba.get(choix - 1);\r\n            System.out.println(\"\\n\" + b.afficher());\r\n            if (!b.estRetour && !b.isRemplaLivre()) {\r\n                System.out.println(\"\\nQue voulez-vous faire ensuite?\");\r\n                choix = selectionChoix(new String[] {\"Confirmer l'arrivée du produit de remplacement\",\r\n                        \"Retourner aux billets\", \"Retourner au menu\"});\r\n                if (choix == 1) {\r\n                    if (b.comfirmerLivraisonRempla()) {\r\n                        try {\r\n                            Revendeur r = initialiserRevendeur(initialiserProduit(b.produitInitial).nomReven);\r\n                            r.trouverBillet(b.id).comfirmerLivraisonRempla();\r\n                            r.save();\r\n                            acheteur.save();\r\n                            System.out.println(\"\\nVous avez confirmé la livraison du produit de remplacement!\");\r\n                        } catch (IOException e) {\r\n                            e.printStackTrace();\r\n                        }\r\n                    }\r\n                    else\r\n                        System.out.println(\"\\nVous avez déjà confirmé la réception du produit de remplacement!\");\r\n                }\r\n                else if (choix == 3)\r\n                    return;\r\n            }\r\n        }\r\n\r\n    }\r\n    static void ecrireEvaluation (Produit p) {\r\n        System.out.println(\"\\nÉvaluation du produit \" + p.titre + \":\");\r\n        System.out.print(\"Veuillez entrer une note entière entre 1 et 5: \");\r\n        try {\r\n            int note;\r\n            note = demanderIntPositif(\"une note\");\r\n            while (note > 5 || note == 0) {\r\n                System.out.print(\"Veuillez entrer une note plus petite ou égale à 5: \");\r\n                note = demanderIntPositif(\"une note\");\r\n            }\r\n            System.out.print(\"Entrez un commentaire sur le produit: \");\r\n            String comment = br.readLine();\r\n            p.addEvaluation(new Evaluation(acheteur.getUsername(), note, comment));\r\n            System.out.println(\"\\nVotre évaluation a été écrite avec succès!\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n    static void changerInformations() {\r\n        System.out.println(\"\\nTODO\");\r\n    }\r\n    static String afficherNotifications() {\r\n        return \"\\nTODO\";\r\n    }\r\n    static void gererAcheteursSuivis() { System.out.println(\"\\nTODO\"); }\r\n    static void rechercherRevendeur() {\r\n        System.out.println(\"\\nTODO\");\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/ControleurAcheteur.java b/src/main/java/unishop/ControleurAcheteur.java
+--- a/src/main/java/unishop/ControleurAcheteur.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/ControleurAcheteur.java	(date 1703452907040)
+@@ -165,10 +165,66 @@
+                             acheteur.panier.addProduit(p);
+                             System.out.println("\nVous avez ajouté " + p.titre + " au panier!");
+                             System.out.println("\nVoulez-vous aller au panier?");
+-                            if (1 == selectionChoix(new String[] {"Oui", "Non"}))
++                            if (choixOuiNon())
+                                 return 2;
+                         }
+-                        case 3 -> System.out.println("\n" + p.getEvaluationsDisplay());
++                        case 3 -> {
++                            System.out.println("\nChoississez une évaluation:");
++                            ArrayList<Evaluation> es = p.getEvaluations();
++                            ArrayList<String> ess = new ArrayList<>();
++                            for (Evaluation e : es)
++                                ess.add(e.getDisplayFormat() + "\n");
++                            ess.add("Retourner au produit");
++                            choix = selectionChoix(ess.toArray());
++                            if (choix == ess.size())
++                                continue;
++                            Evaluation e = es.get(choix - 1);
++                            System.out.println(e.getDisplayFormat());
++                            if (e.nomAcheteur.equals(acheteur.getUsername())) {
++                                System.out.println("\nC'est votre propre évaluation!");
++                                continue;
++                            }
++                            System.out.println("\nQue voulez-vous faire?");
++                            choix = selectionChoix(new String[] {"Liker l'évaluation",
++                                    "Signaler l'évaluation comme inappropriée", "Retourner au produit"});
++                            if (choix == 3)
++                                continue;
++                            Acheteur a = initialiserAcheteur(e.nomAcheteur);
++                            Evaluation evalAch = null;
++                            for (Evaluation eas : a.getEvals()) {
++                                if (eas.isEqual(e)) {
++                                    evalAch = eas;
++                                    break;
++                                }
++                            }
++                            if (evalAch == null) {
++                                System.out.println("Erreur: Eval pas trouvé chez l'acheteur");
++                                continue;
++                            }
++                            if (choix == 1) {
++                                if (evalAch.getLikes() == 0) {
++                                    a.ajouterPoints(10);
++                                }
++                                evalAch.ajouterLike();
++                                a.saveEvals();
++                                e.ajouterLike();
++                                p.save();
++                                System.out.println("Vous avez liké l'évaluation avec succès!");
++                            }
++                            else {
++                                if (evalAch.signaler()) {
++                                    if (evalAch.getLikes() == 0)
++                                        a.ajouterPoints(-10);
++                                    a.saveEvals();
++                                    e.signaler();
++                                    p.save();
++                                    System.out.println("Vous avez signalé cette évaluation!");
++                                }
++                                else
++                                    System.out.println("Cette évaluation était déjà signalée!");
++                            }
++
++                        }
+                         case 4 -> {
+                             if (acheteur.aAcheteProduit(p.titre)) {
+                                 ecrireEvaluation(p);
+@@ -301,7 +357,7 @@
+                 try {
+                     System.out.println("Voulez-vous utiliser la même adresse que votre compte?");
+                     String adresse = acheteur.getAddress();
+-                    if (2 == selectionChoix(new String[] {"Oui", "Non"})) {
++                    if (!choixOuiNon()) {
+                         System.out.print("Entrez une nouvelle adresse: ");
+                         adresse = br.readLine();
+                     }
+@@ -374,7 +430,9 @@
+             }
+             System.out.print("Entrez un commentaire sur le produit: ");
+             String comment = br.readLine();
+-            p.addEvaluation(new Evaluation(acheteur.getUsername(), note, comment));
++            Evaluation e = new Evaluation(acheteur.getUsername(), note, comment, 0, false);
++            p.addEvaluation(e);
++            acheteur.ajouterEvaluation(e);
+             System.out.println("\nVotre évaluation a été écrite avec succès!");
+         } catch (IOException e) {
+             e.printStackTrace();
+Index: src/main/java/unishop/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop;\r\n\r\nimport unishop.Users.*;\r\nimport unishop.Categories.*;\r\n\r\nimport java.io.*;\r\nimport java.nio.charset.StandardCharsets;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Paths;\r\nimport java.util.*;\r\n\r\nimport static unishop.ControleurAcheteur.menuAcheteur;\r\nimport static unishop.ControleurInvite.menuInvite;\r\nimport static unishop.ControleurRevendeur.menuRevendeur;\r\n//import java.util.regex.*;\r\n\r\npublic class Main {\r\n\r\n    public final static String DATABASE_PATH = \"Database/\";\r\n    public final static String PRODUITS_PATH = DATABASE_PATH + \"Produits/\";\r\n    public final static String USERS_PATH = DATABASE_PATH + \"Users/\";\r\n    public final static String ACHETEURS = \"Acheteurs/\";\r\n    public final static String REVENDEURS = \"Revendeurs/\";\r\n    public final static String CSV = \".csv\";\r\n    public final static String IDS = DATABASE_PATH + \"IDs.csv\";\r\n\r\n    public final static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));\r\n\r\n    private static User connectedUser = null;\r\n    private static short choix;\r\n\r\n    public static void main(String[] args) {\r\n        menuPrincipal();\r\n        System.out.println(\"\\nAu plaisir de vous revoir!\");\r\n    }\r\n    static void menuPrincipal(){\r\n        while (true) {\r\n            System.out.println(\"\\nBienvenue sur UniShop!\");\r\n            choix = selectionChoix(new String[]{\"Se connecter\", \"Créer un compte\", \"Continuer en tant qu'invité\",\r\n                    \"Quitter UniShop\"});\r\n            switch (choix) {\r\n                case 1 -> {\r\n                    connectedUser = connecterUser();\r\n                    if (connectedUser == null)\r\n                        continue;\r\n                    System.out.print(\"\\nRebonjour \" + connectedUser.getUsername() + \" ! \");\r\n                    if (connectedUser.isAcheteur())\r\n                        menuAcheteur((Acheteur) connectedUser);\r\n                    else\r\n                        menuRevendeur((Revendeur) connectedUser);\r\n                    connectedUser = null;\r\n                }\r\n                case 2 -> creerCompte();\r\n                case 3 -> menuInvite();\r\n                case 4 -> {return;}\r\n            }\r\n        }\r\n    }\r\n    public static short selectionChoix(Object[] choix) {\r\n        int nbChoix = choix.length;\r\n        for (int i = 0; i < nbChoix; ++i) {\r\n            System.out.println(i + 1 + \". \" + choix[i]);\r\n        }\r\n        try {\r\n            while (true) {\r\n                System.out.print(\"Choisir une option: \");\r\n                String reponseS = br.readLine();\r\n                try {\r\n                    short reponse = Short.parseShort(reponseS);\r\n                    if (reponse < nbChoix + 1 && reponse > 0)\r\n                        return reponse;\r\n                    else\r\n                        System.out.println(\"Choix invalide! Veuillez entrer un choix de 1 à \" + nbChoix);\r\n                }\r\n                catch(NumberFormatException e){\r\n                    System.out.println(\"Veuillez entrer un chiffre de 1 à \" + nbChoix);\r\n                }\r\n            }\r\n        }\r\n        catch(IOException e) {\r\n            e.printStackTrace();\r\n            return 0;\r\n        }\r\n    }\r\n\r\n    static void creerCompte() {\r\n        System.out.println(\"\\nChoisissez le type de compte à créer:\");\r\n        choix = selectionChoix(new String[]{\"Acheteur\", \"Revendeur\", \"Revenir au menu principal\"});\r\n        if (choix == 3)\r\n            return;\r\n        System.out.println(\"Remplissez le formulaire pour créer un compte:\");\r\n        System.out.print(\"Entrez votre username: \");\r\n        try {\r\n            String username = br.readLine();\r\n            List<String> acheteurs = fichiersDansDossier(USERS_PATH + ACHETEURS);\r\n            List<String> revendeurs = fichiersDansDossier(USERS_PATH + REVENDEURS);\r\n            while (acheteurs.contains(username) || revendeurs.contains(username)) {\r\n                System.out.print(\"Ce Username existe déja. Veuillez entrer un autre Username: \");\r\n                username = br.readLine();\r\n            }\r\n            System.out.print(\"Entrez votre mot de passe: \");\r\n            String motDePasse = br.readLine();\r\n            System.out.print(\"Entrez votre courriel: \");\r\n            String courriel = br.readLine();\r\n            System.out.print(\"Entrez votre téléphone: \");\r\n            long telephone = demanderLong(\"un téléphone\");\r\n            System.out.print(\"Entrez votre adresse: \");\r\n            String adresse = br.readLine();\r\n            if (choix == 1) {\r\n                String basePath =  USERS_PATH + ACHETEURS + username;\r\n                System.out.print(\"Entrez votre nom: \");\r\n                String nom = br.readLine();\r\n                System.out.print(\"Entrez votre prénom: \");\r\n                String prenom = br.readLine();\r\n                if (new File(basePath).mkdir() && new File(basePath + \"/Commandes\").mkdir()) {\r\n                    String[] infos = new String[] {motDePasse, courriel, \"\" + telephone , adresse, nom, prenom,\r\n                            \"0,0\"};\r\n                    ecrireFichierEntier(basePath + \"/Infos.csv\", String.join(\",\", infos) + \"\\n\\n\\n\");\r\n                    ecrireFichierEntier(basePath + \"/Panier.csv\", \"0,0\");\r\n                    System.out.println(\"Inscription du compte acheteur \" + username + \" réussi!\");\r\n                }\r\n                else\r\n                    System.out.println(\"Erreur lors de la création du dossier. Veuillez recommencer\");\r\n\r\n            } else {\r\n                String basePath = USERS_PATH + REVENDEURS + username;\r\n                if (new File(basePath).mkdir() && new File(basePath + \"/Commandes\").mkdir()) {\r\n                    String[] infos = new String[] {motDePasse, courriel, \"\" + telephone , adresse, \"0,0,0\" };\r\n                    ecrireFichierEntier(basePath + \"/Infos.csv\", String.join(\",\", infos) + \"\\n\\n\");\r\n                    System.out.println(\"Inscription du compte revendeur \" + username + \" réussi!\");\r\n                }\r\n                else\r\n                    System.out.println(\"Erreur lors de la création du dossier. Veuillez recommencer\");\r\n            }\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n    static User connecterUser() {\r\n        try {\r\n            System.out.println(\"\\nConnection (Ne rien rentrer retourne au menu principal): \");\r\n            String categorie = \"\";\r\n            String username = \"\";\r\n            while (categorie.isEmpty()) {\r\n                System.out.print(\"Entrez votre Username: \");\r\n                username = br.readLine();\r\n                if (username.isEmpty())\r\n                    return null;\r\n                File dossier = new File (USERS_PATH + ACHETEURS + username);\r\n                if (dossier.exists()) {\r\n                    categorie = ACHETEURS;\r\n                }\r\n                dossier = new File (USERS_PATH + REVENDEURS + username);\r\n                if (dossier.exists()) {\r\n                    categorie = REVENDEURS;\r\n                }\r\n                if (categorie.isEmpty()) {\r\n                    System.out.println(\"Username inconnu. Veuillez réessayer\");\r\n                }\r\n            }\r\n\r\n            String[] data = lireFichierEnEntier(USERS_PATH + categorie + username + \"/Infos.csv\");\r\n            String[] infos = data[0].split(\",\");\r\n            String password = infos[0];\r\n            System.out.print(\"Entrez votre mot de passe: \");\r\n            String passwordEntre = br.readLine();\r\n            if (passwordEntre.isEmpty())\r\n                return null;\r\n            while (!(password.equals(passwordEntre))) {\r\n                System.out.print(\"Mauvais mot de passe! Veuillez recommencer: \");\r\n                passwordEntre = br.readLine();\r\n            }\r\n            if (categorie.equals(ACHETEURS)){\r\n                return initialiserAcheteur(username);\r\n            }\r\n            else {\r\n                return initialiserRevendeur(username);\r\n            }\r\n        }\r\n        catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n        return null;\r\n    }\r\n    static Acheteur initialiserAcheteur(String username) throws IOException {\r\n        String path = USERS_PATH + ACHETEURS + username + \"/\";\r\n        String[] data = lireFichierEnEntier( path+ \"Infos.csv\");\r\n        String[] infos = data[0].split(\",\");\r\n        ArrayList<String> as =  iniArrayList(data[1]);\r\n        ArrayList<String> rl =  iniArrayList(data[2]);\r\n        ArrayList<Billet> bis = new ArrayList<>();\r\n        for (int i = 3; i < data.length; ++i) {\r\n            String[] bs = data[i].split(\",\");\r\n            bis.add(new Billet(Integer.parseInt(bs[0]), bs[1], bs[2], bs[3], Boolean.parseBoolean(bs[4]),\r\n                     Boolean.parseBoolean(bs[5]) , bs[6], bs[7], Boolean.parseBoolean(bs[8])));\r\n        }\r\n        String[] s = lireFichierEnEntier(path +\"Panier.csv\");\r\n        String[] i = s[0].split(\",\");\r\n        float coutT = Float.parseFloat(i[0]);\r\n        int pts = Integer.parseInt(i[1]);\r\n        Commande panier = new Commande((short) 0, coutT, pts);\r\n        for (int j = 1; j < s.length; ++j) {\r\n            Produit p = initialiserProduit(s[j]);\r\n            panier.addInitial(p);\r\n        }\r\n\r\n        ArrayList<Commande> cmds = new ArrayList<>();\r\n        String commandesPath = path + \"Commandes/\";\r\n        for (String l : fichiersDansDossier(commandesPath)) {\r\n            String[] all = lireFichierEnEntier(commandesPath + l);\r\n            String[] fstLine = all[0].split(\",\");\r\n            Commande c = new Commande(Short.parseShort(fstLine[2]), Float.parseFloat(fstLine[3]),\r\n                    Integer.parseInt(fstLine[4]));\r\n            c.addPastInfo(Integer.parseInt(fstLine[0]), fstLine[1], fstLine[5]);\r\n            for (int j = 1; j < all.length; ++j) {\r\n                String[] line = all[j].split(\",\");\r\n                Produit p = initialiserProduit(line[0]);\r\n                p.setUniqueId(Integer.parseInt(line[1]));\r\n                c.addInitial(p);\r\n            }\r\n            cmds.add(c);\r\n        }\r\n        return new Acheteur(username, infos[0], infos[1], Long.parseLong(infos[2]),\r\n                infos[3], infos[4], infos[5], Integer.parseInt(infos[6]), Integer.parseInt(infos[7]), as, rl, bis,\r\n                panier, cmds);\r\n    }\r\n    static Revendeur initialiserRevendeur(String username) throws IOException {\r\n        String path = USERS_PATH + REVENDEURS + username + \"/\";\r\n        String[] data = lireFichierEnEntier( path+ \"Infos.csv\");\r\n        String[] infos = data[0].split(\",\");\r\n        ArrayList<String> followers = iniArrayList(data[1]);\r\n        ArrayList<Billet> bis = new ArrayList<>();\r\n        for (int i = 2; i < data.length; ++i) {\r\n            String[] bs = data[i].split(\",\");\r\n            bis.add(new Billet(Integer.parseInt(bs[0]), bs[1], bs[2], bs[3], Boolean.parseBoolean(bs[4]),\r\n                    Boolean.parseBoolean(bs[5]) , bs[6], bs[7], Boolean.parseBoolean(bs[8])));\r\n        }\r\n        ArrayList<Produit> ps = new ArrayList<>();\r\n        for(String pc : fichiersDansDossier(PRODUITS_PATH)){\r\n            String r = lireFichierEnEntier(PRODUITS_PATH + pc)[0].split(\",\")[0];\r\n            if (r.equals(username))\r\n                ps.add(initialiserProduit(pc));\r\n        }\r\n        return new Revendeur(username, infos[0], infos[1], Long.parseLong(infos[2]), infos[3],\r\n                Float.parseFloat(infos[4]), Integer.parseInt(infos[5]), followers, bis, ps, new ArrayList<>());\r\n    }\r\n    static Produit initialiserProduit(String titreProduit) throws IOException{\r\n        String path = PRODUITS_PATH + titreProduit;\r\n        if (!titreProduit.endsWith(CSV))\r\n            path += CSV;\r\n        String[] s = lireFichierEnEntier(path);\r\n        String[] f = s[0].split(\",\");\r\n        String[] images = s[1].split(\",\");\r\n        String[] videos = s[2].split(\",\");\r\n        String[] cs = s[3].split(\",\");\r\n        Categorie c = null;\r\n        switch (Short.parseShort(cs[0])) {\r\n            case 0 -> c = new CLivres(cs[1], cs[2], cs[3], Long.parseLong(cs[4]), cs[5], Integer.parseInt(cs[6]),\r\n                    Integer.parseInt(cs[7]));\r\n            case 1 -> c = new CRessources(cs[1], cs[2], cs[3], Long.parseLong(cs[4]), cs[5], Integer.parseInt(cs[6]));\r\n            case 2 -> c = new CPapeterie(cs[1], cs[2], cs[3]);\r\n            case 3 -> c = new CInformatique(cs[1], cs[2], cs[3], cs[4]);\r\n            case 4 -> c = new CBureau(cs[1], cs[2], cs[3]);\r\n        }\r\n        ArrayList<String> likes =  iniArrayList(s[4]);\r\n        Evaluation[] evals = new Evaluation[s.length - 5];\r\n        for (int i = 5; i < s.length; ++i) {\r\n            String[] e = s[i].split(\",\");\r\n            evals[i - 5] = new Evaluation(e[0], Byte.parseByte(e[1]), e[2]);\r\n        }\r\n        ArrayList<Evaluation> evalsL = new ArrayList<>(Arrays.asList(evals));\r\n        return new Produit(f[0], f[1], f[2], Float.parseFloat(f[3]), Integer.parseInt(f[4]), Integer.parseInt(f[5]),\r\n                images, videos, c, likes, evalsL);\r\n    }\r\n    static int demanderIntPositif(String demande) throws IOException {\r\n        int i;\r\n        while (true) {\r\n            try {\r\n                i = Integer.parseInt(br.readLine());\r\n                if (i >= 0)\r\n                    return i;\r\n                else {\r\n                    System.out.print(\"Veuillez entrer un entier positif: \");\r\n                }\r\n            }\r\n            catch (NumberFormatException e) {\r\n                System.out.print(\"Veuillez entrer \" + demande + \" valide: \");\r\n            }\r\n        }\r\n    }\r\n    static long demanderLong(String demande) throws IOException {\r\n        long l;\r\n        while (true) {\r\n            try {\r\n                l = Long.parseLong(br.readLine());\r\n                return l;\r\n            }\r\n            catch (NumberFormatException e) {\r\n                System.out.print(\"Veuillez entrer \" + demande + \" valide: \");\r\n            }\r\n        }\r\n    }\r\n    static float demanderFloat(String demande) throws IOException {\r\n        float prix;\r\n        while (true) {\r\n            try {\r\n                prix = arrondirPrix(Float.parseFloat(br.readLine()));\r\n                if (prix >= 0)\r\n                    return arrondirPrix(prix);\r\n                else\r\n                    System.out.print(\"Veuillez entrer un chiffre à virgule positif: \");\r\n            }\r\n            catch (NumberFormatException e) {\r\n                System.out.print(\"Veuillez entrer \" + demande + \" valide (Nombre à virgule): \");\r\n            }\r\n        }\r\n    }\r\n    public static float arrondirPrix(float prix) {\r\n        return Math.round((prix) * 100) / 100f;\r\n    }\r\n\r\n    public static String[] lireFichierEnEntier(String path) throws IOException {\r\n        return Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8).toArray(new String[0]);\r\n    }\r\n    public static void ecrireFichierEntier(String path, String toWrite) {\r\n        try {\r\n            BufferedWriter bw = new BufferedWriter(new FileWriter(path));\r\n            bw.write(toWrite);\r\n            bw.close();\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n    static List<String> fichiersDansDossier(String path) {\r\n        return Arrays.asList(Objects.requireNonNull(new File(path).list()));\r\n    }\r\n    static ArrayList<String> iniArrayList(String s) {\r\n        String[] tab = s.split(\",\");\r\n        if (tab[0].isEmpty())\r\n            return new ArrayList<>(Arrays.asList(tab).subList(1, tab.length));\r\n        else\r\n            return new ArrayList<>(Arrays.asList(tab));\r\n\r\n    }\r\n    public static String getConnectedUsername() {\r\n        return connectedUser.getUsername();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/Main.java b/src/main/java/unishop/Main.java
+--- a/src/main/java/unishop/Main.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/Main.java	(date 1703452343070)
+@@ -9,6 +9,7 @@
+ import java.nio.file.Paths;
+ import java.util.*;
+ 
++
+ import static unishop.ControleurAcheteur.menuAcheteur;
+ import static unishop.ControleurInvite.menuInvite;
+ import static unishop.ControleurRevendeur.menuRevendeur;
+@@ -23,7 +24,7 @@
+     public final static String REVENDEURS = "Revendeurs/";
+     public final static String CSV = ".csv";
+     public final static String IDS = DATABASE_PATH + "IDs.csv";
+-
++    public final static String EMAILS = DATABASE_PATH + "emails.csv";
+     public final static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+ 
+     private static User connectedUser = null;
+@@ -44,6 +45,7 @@
+                     if (connectedUser == null)
+                         continue;
+                     System.out.print("\nRebonjour " + connectedUser.getUsername() + " ! ");
++                    connectedUser.save();
+                     if (connectedUser.isAcheteur())
+                         menuAcheteur((Acheteur) connectedUser);
+                     else
+@@ -56,6 +58,29 @@
+             }
+         }
+     }
++
++    public static boolean choixOuiNon() {
++        System.out.println("1. Oui\n2. Non");
++        try {
++            while (true) {
++                String reponseS = br.readLine();
++                try {
++                    short reponse = Short.parseShort(reponseS);
++                    if (reponse == 1 || reponse == 2)
++                        return reponse == 1;
++                    else
++                        System.out.println("Choix invalide! Veuillez entrer un choix de 1 à 2");
++                }
++                catch(NumberFormatException e){
++                    System.out.println("Veuillez entrer un chiffre de 1 à 2");
++                }
++            }
++        }
++        catch(IOException e) {
++            e.printStackTrace();
++            return false;
++        }
++    }
+     public static short selectionChoix(Object[] choix) {
+         int nbChoix = choix.length;
+         for (int i = 0; i < nbChoix; ++i) {
+@@ -88,7 +113,7 @@
+         choix = selectionChoix(new String[]{"Acheteur", "Revendeur", "Revenir au menu principal"});
+         if (choix == 3)
+             return;
+-        System.out.println("Remplissez le formulaire pour créer un compte:");
++        System.out.println("\nRemplissez le formulaire pour créer un compte:");
+         System.out.print("Entrez votre username: ");
+         try {
+             String username = br.readLine();
+@@ -102,6 +127,13 @@
+             String motDePasse = br.readLine();
+             System.out.print("Entrez votre courriel: ");
+             String courriel = br.readLine();
++            ArrayList<String> emails = iniArrayList(lireFichierEnEntier(EMAILS)[0]);
++            while (emails.contains(courriel) || courriel.isEmpty()) {
++                System.out.print("Un compte a déjà été créé avec ce courriel. Veuillez en entrer un autre: ");
++                courriel = br.readLine();
++            }
++            emails.add(courriel);
++            ecrireFichierEntier(EMAILS, String.join(",", emails));
+             System.out.print("Entrez votre téléphone: ");
+             long telephone = demanderLong("un téléphone");
+             System.out.print("Entrez votre adresse: ");
+@@ -114,9 +146,10 @@
+                 String prenom = br.readLine();
+                 if (new File(basePath).mkdir() && new File(basePath + "/Commandes").mkdir()) {
+                     String[] infos = new String[] {motDePasse, courriel, "" + telephone , adresse, nom, prenom,
+-                            "0,0"};
++                            "0,0", "" + obtenirTempsEnSecondes()};
+                     ecrireFichierEntier(basePath + "/Infos.csv", String.join(",", infos) + "\n\n\n");
+                     ecrireFichierEntier(basePath + "/Panier.csv", "0,0");
++                    ecrireFichierEntier(basePath + "Evaluations.csv", "");
+                     System.out.println("Inscription du compte acheteur " + username + " réussi!");
+                 }
+                 else
+@@ -125,7 +158,8 @@
+             } else {
+                 String basePath = USERS_PATH + REVENDEURS + username;
+                 if (new File(basePath).mkdir() && new File(basePath + "/Commandes").mkdir()) {
+-                    String[] infos = new String[] {motDePasse, courriel, "" + telephone , adresse, "0,0,0" };
++                    String[] infos = new String[] {motDePasse, courriel, "" + telephone , adresse, "0,0,0, ",
++                            "" + obtenirTempsEnSecondes() };
+                     ecrireFichierEntier(basePath + "/Infos.csv", String.join(",", infos) + "\n\n");
+                     System.out.println("Inscription du compte revendeur " + username + " réussi!");
+                 }
+@@ -170,6 +204,16 @@
+                 System.out.print("Mauvais mot de passe! Veuillez recommencer: ");
+                 passwordEntre = br.readLine();
+             }
++            if (infos.length == 9) {
++                long creationTime = Long.parseLong(infos[8]);
++                if (obtenirTempsEnSecondes() - creationTime > 86400) {
++                    System.out.println("\nCe compte a été créé il y a plus de 24h et est donc invalide! Veuillez créer"+
++                            "un nouveau compte!");
++                    effacerCompte(new File(USERS_PATH + categorie + username));
++                }
++                else
++                    System.out.println("Votre compte est maintenant activé!");
++            }
+             if (categorie.equals(ACHETEURS)){
+                 return initialiserAcheteur(username);
+             }
+@@ -203,7 +247,13 @@
+             Produit p = initialiserProduit(s[j]);
+             panier.addInitial(p);
+         }
+-
++        ArrayList<Evaluation> es = new ArrayList<>();
++        s = lireFichierEnEntier(path + "Evaluations.csv");
++        for (String e : s) {
++            String[] ea = e.split(",");
++            es.add(new Evaluation(username, Integer.parseInt(ea[0]), ea[1], Integer.parseInt(ea[2]),
++                    Boolean.parseBoolean(ea[3])));
++        }
+         ArrayList<Commande> cmds = new ArrayList<>();
+         String commandesPath = path + "Commandes/";
+         for (String l : fichiersDansDossier(commandesPath)) {
+@@ -222,7 +272,7 @@
+         }
+         return new Acheteur(username, infos[0], infos[1], Long.parseLong(infos[2]),
+                 infos[3], infos[4], infos[5], Integer.parseInt(infos[6]), Integer.parseInt(infos[7]), as, rl, bis,
+-                panier, cmds);
++                panier, cmds, es);
+     }
+     static Revendeur initialiserRevendeur(String username) throws IOException {
+         String path = USERS_PATH + REVENDEURS + username + "/";
+@@ -266,7 +316,8 @@
+         Evaluation[] evals = new Evaluation[s.length - 5];
+         for (int i = 5; i < s.length; ++i) {
+             String[] e = s[i].split(",");
+-            evals[i - 5] = new Evaluation(e[0], Byte.parseByte(e[1]), e[2]);
++            evals[i - 5] = new Evaluation(e[0], Integer.parseInt(e[1]), e[2], Integer.parseInt(e[3]),
++                    Boolean.parseBoolean(e[4]));
+         }
+         ArrayList<Evaluation> evalsL = new ArrayList<>(Arrays.asList(evals));
+         return new Produit(f[0], f[1], f[2], Float.parseFloat(f[3]), Integer.parseInt(f[4]), Integer.parseInt(f[5]),
+@@ -318,7 +369,9 @@
+     public static float arrondirPrix(float prix) {
+         return Math.round((prix) * 100) / 100f;
+     }
+-
++    public static long obtenirTempsEnSecondes() {
++        return System.currentTimeMillis() / 1000;
++    }
+     public static String[] lireFichierEnEntier(String path) throws IOException {
+         return Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8).toArray(new String[0]);
+     }
+@@ -345,4 +398,14 @@
+     public static String getConnectedUsername() {
+         return connectedUser.getUsername();
+     }
++    public static void effacerCompte(File file) {
++        File[] contents = file.listFiles();
++        if (contents != null) {
++            for (File f : contents) {
++                effacerCompte(f);
++            }
++        }
++        if (!file.delete())
++            System.out.println("Compte pas effacé: " + file);
++    }
+ }
+\ No newline at end of file
+Index: src/main/java/unishop/Produit.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop;\r\n\r\nimport unishop.Categories.Categorie;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.StringJoiner;\r\n\r\npublic class Produit {\r\n\r\n    final String nomReven;\r\n    final String titre;\r\n    final String description;\r\n    final float prix;\r\n    private int points;\r\n    private int quantite;\r\n    final String[] images;\r\n    final String[] videos;\r\n    final Categorie categorie;\r\n    final ArrayList<String> likes;\r\n    final ArrayList<Evaluation> evaluations;\r\n    private float noteMoyenne;\r\n    private int id;\r\n\r\n    public Produit(String nomReven, String titre, String description, float prix, int quantite, int points,\r\n                   String[] images, String[] videos, Categorie categorie, ArrayList<String> likes,\r\n                   ArrayList<Evaluation> evaluations) {\r\n        this.nomReven = nomReven;\r\n        this.titre = titre;\r\n        this.description = description;\r\n        this.prix = prix;\r\n        this.quantite = quantite;\r\n        this.points = points;\r\n        this.images = images.clone();\r\n        this.videos = videos.clone();\r\n        this.categorie = categorie;\r\n        this.likes = new ArrayList<>(likes);\r\n        this.evaluations = new ArrayList<>(evaluations);\r\n        this.noteMoyenne = getNoteMoyenne();\r\n    }\r\n    public int getPoints() {return this.points;}\r\n    public void save() {\r\n        StringJoiner sj = new StringJoiner(\",\");\r\n        sj.add(nomReven);\r\n        sj.add(titre);\r\n        sj.add(description);\r\n        sj.add(String.valueOf(prix));\r\n        sj.add(String.valueOf(quantite));\r\n        sj.add(String.valueOf(points));\r\n        sj.add(String.valueOf(noteMoyenne));\r\n        String fst = sj.toString();\r\n\r\n        sj = new StringJoiner(\"\\n\");\r\n        sj.add(fst);\r\n        sj.add(String.join(\",\", images));\r\n        sj.add(String.join(\",\", videos));\r\n        sj.add(categorie.getFormatSauvegarde());\r\n        sj.add(String.join(\",\", likes));\r\n        if(evaluations.isEmpty())\r\n            sj.add(\"\");\r\n        for(Evaluation e : evaluations)\r\n            sj.add(e.getSaveFormat());\r\n        Main.ecrireFichierEntier(Main.PRODUITS_PATH + titre + Main.CSV, sj.toString());\r\n    }\r\n    public String getFormatDisplay() {\r\n        StringJoiner sj = new StringJoiner(\"\\n\");\r\n        sj.add(titre);\r\n        sj.add(\"Images: \" + String.join(\",\", images));\r\n        sj.add(\"Vidéos: \" + String.join(\",\", videos));\r\n        sj.add(description);\r\n        sj.add(\"Revendeur: \" + nomReven);\r\n        sj.add(\"Prix: \" + prix + \"$\");\r\n        sj.add(points + \" points par unité\");\r\n        sj.add(\"Quantité en inventaire: \" + quantite);\r\n        sj.add(categorie.getFormatDisplay());\r\n        sj.add(likes.size() + \" likes\");\r\n        sj.add(evaluations.size() + \" évaluations\");\r\n        if (!evaluations.isEmpty())\r\n            sj.add(\"Note moyenne: \" + noteMoyenne);\r\n        return sj.toString();\r\n    }\r\n    public String getQuickDisplay() {\r\n        StringJoiner sj = new StringJoiner(\"; \");\r\n        sj.add(titre);\r\n        sj.add(categorie.getCat());\r\n        sj.add(prix + \"$\");\r\n        sj.add(points + \" points\");\r\n        sj.add(quantite + \" disponibles\");\r\n        return sj.toString();\r\n    }\r\n\r\n    public int getId() {\r\n        return id;\r\n    }\r\n\r\n    public int getQuantite() {\r\n        return quantite;\r\n    }\r\n\r\n    public void setUniqueId(int id) {\r\n        this.id = id;\r\n    }\r\n    public String liker(String nomAcheteur) {\r\n        if (likes.contains(nomAcheteur))\r\n            return \"Vous avez déjà liké ce produit!\";\r\n        this.likes.add(nomAcheteur);\r\n        save();\r\n        return \"Vous avez liké \" + titre + \"!\";\r\n    }\r\n    public void addEvaluation(Evaluation e) {\r\n        this.evaluations.add(e);\r\n        this.noteMoyenne = getNoteMoyenne();\r\n        save();\r\n    }\r\n    public float getNoteMoyenne() {\r\n        float n = 0;\r\n        for (Evaluation e : evaluations) {\r\n            n = Main.arrondirPrix(n + e.note);\r\n        }\r\n        return Main.arrondirPrix(n / evaluations.size());\r\n    }\r\n    public String getEvaluationsDisplay() {\r\n        if (evaluations.isEmpty())\r\n            return \"Ce produit n'a aucune évaluation pour le moment.\";\r\n        else {\r\n            StringJoiner sj = new StringJoiner(\"\\n\\n\");\r\n            for (Evaluation e : evaluations)\r\n                sj.add(e.getDisplayFormat());\r\n            return sj.toString();\r\n        }\r\n    }\r\n    public boolean aDesEvaluations() {return this.evaluations.isEmpty();}\r\n    public ArrayList<String> voirLikes() {\r\n        return new ArrayList<>(likes);\r\n    }\r\n    public String getLike(int i) {\r\n        return likes.get(i);\r\n    }\r\n    public void commander() {\r\n        --this.quantite;\r\n        save();\r\n    }\r\n    public boolean estEnPromotion() {return this.points > Math.floor(prix);}\r\n    public void enleverPromotion() {\r\n        this.points = (int) Math.floor(prix);\r\n        save();\r\n    }\r\n    public void changerPromotion(int pts) {\r\n        this.points = pts;\r\n        save();\r\n    }\r\n    public void restocker(int quantite) {\r\n        this.quantite += quantite;\r\n        save();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/Produit.java b/src/main/java/unishop/Produit.java
+--- a/src/main/java/unishop/Produit.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/Produit.java	(date 1703443758908)
+@@ -58,7 +58,7 @@
+         if(evaluations.isEmpty())
+             sj.add("");
+         for(Evaluation e : evaluations)
+-            sj.add(e.getSaveFormat());
++            sj.add(e.getSaveFormatProduit());
+         Main.ecrireFichierEntier(Main.PRODUITS_PATH + titre + Main.CSV, sj.toString());
+     }
+     public String getFormatDisplay() {
+@@ -128,6 +128,9 @@
+             return sj.toString();
+         }
+     }
++    public ArrayList<Evaluation> getEvaluations() {
++        return new ArrayList<>(evaluations);
++    }
+     public boolean aDesEvaluations() {return this.evaluations.isEmpty();}
+     public ArrayList<String> voirLikes() {
+         return new ArrayList<>(likes);
+Index: Database/Produits/Pencil Sharpener.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>p,Pencil Sharpener,Sharpens your pencils,5.0,9988,5,3.2\r\na,a\r\n2,1\r\n2,Staedler,XAWFMK2155,Article de papeterie\r\na\r\na,3,Il sharpen pretty well :)\r\na,5,sharpens :)\r\na,3,correct\r\na,3,ayo\r\na,2,awfwfg
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Produits/Pencil Sharpener.csv b/Database/Produits/Pencil Sharpener.csv
+--- a/Database/Produits/Pencil Sharpener.csv	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/Database/Produits/Pencil Sharpener.csv	(date 1703452945297)
+@@ -1,10 +1,11 @@
+-p,Pencil Sharpener,Sharpens your pencils,5.0,9988,5,3.2
++p,Pencil Sharpener,Sharpens your pencils,5.0,9988,5,3.5
+ a,a
+ 2,1
+ 2,Staedler,XAWFMK2155,Article de papeterie
+ a
+-a,3,Il sharpen pretty well :)
+-a,5,sharpens :)
+-a,3,correct
+-a,3,ayo
+-a,2,awfwfg
+\ No newline at end of file
++a,3,Il sharpen pretty well :),0,false
++a,5,sharpens :),0,false
++a,3,correct,0,false
++a,3,ayo,0,false
++a,2,awfwfg,0,false
++a,5,g,1,true
+\ No newline at end of file
+Index: Database/Produits/Lol.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>p,Lol,lol,15.0,83,15,1.5\r\nawffw\r\nwfafw\r\n1,wdaw,wafawf,Ressource papier,2,wafawf,2\r\na\r\na,0,Il est ass\r\na,3,watw
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Produits/Lol.csv b/Database/Produits/Lol.csv
+--- a/Database/Produits/Lol.csv	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/Database/Produits/Lol.csv	(date 1703451744801)
+@@ -3,5 +3,5 @@
+ wfafw
+ 1,wdaw,wafawf,Ressource papier,2,wafawf,2
+ a
+-a,0,Il est ass
+-a,3,watw
+\ No newline at end of file
++a,0,Il est ass,0,false
++a,3,watw,0,false
+\ No newline at end of file
+Index: Database/Produits/Produit1.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Revendeur1,Produit1,Produit1,25.0,9996,10,4.0\r\n1,1\r\n1,1\r\n0,r,r,Roman,2,15/11/2023,1,1\r\nAcheteur1,Acheteur2\r\nAcheteur1,5,Très bien\r\nAcheteur2,3,Fun
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Produits/Produit1.csv b/Database/Produits/Produit1.csv
+--- a/Database/Produits/Produit1.csv	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/Database/Produits/Produit1.csv	(date 1703451744792)
+@@ -3,5 +3,5 @@
+ 1,1
+ 0,r,r,Roman,2,15/11/2023,1,1
+ Acheteur1,Acheteur2
+-Acheteur1,5,Très bien
+-Acheteur2,3,Fun
+\ No newline at end of file
++Acheteur1,5,Très bien,0,false
++Acheteur2,3,Fun,0,false
+\ No newline at end of file
+Index: src/main/java/unishop/Users/Acheteur.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop.Users;\r\n\r\nimport unishop.*;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.StringJoiner;\r\n\r\npublic class Acheteur extends User{\r\n\r\n    final String nom;\r\n    final String prenom;\r\n    private int points;\r\n    private final int likes;\r\n    final ArrayList<String> acheteursSuivis;\r\n    final ArrayList<String> suiveurs;\r\n    final ArrayList<String> revendeursLikes;\r\n    public final Commande panier;\r\n\r\n    public Acheteur(String u, String p, String em, long phone, String address, String nom,\r\n                    String prenom, int points, int likes, ArrayList<String> acheteursSuivis,\r\n                    ArrayList<String> revendeursLikes, ArrayList<Billet> b, Commande panier, ArrayList<Commande> cmds){\r\n        super(u, p, em, phone, address, b, cmds);\r\n        this.nom = nom;\r\n        this.prenom = prenom;\r\n        this.points = points;\r\n        this.likes = likes;\r\n        this.acheteursSuivis = new ArrayList<>(acheteursSuivis);\r\n        this.revendeursLikes = new ArrayList<>(revendeursLikes);\r\n        this.suiveurs = new ArrayList<>(); //Suiveurs en input\r\n        this.panier = panier;\r\n    }\r\n\r\n    @Override\r\n    public boolean isAcheteur() {\r\n        return true;\r\n    }\r\n    public void ajouterCommande(Commande c) {\r\n        commandes.add(c);\r\n        points += c.getPointsTotal();\r\n        save();\r\n    }\r\n\r\n    @Override\r\n    public void save() {\r\n        StringJoiner sj = new StringJoiner(\"\\n\");\r\n        String[] infos = new String[] {this.password, this.email, String.valueOf(this.phone), this.address, nom,\r\n                prenom, String.valueOf(points), String.valueOf(likes)};\r\n        sj.add(String.join(\",\", infos));\r\n        sj.add(String.join(\",\", acheteursSuivis));\r\n        sj.add(String.join(\",\", revendeursLikes));\r\n        if (billets.isEmpty())\r\n            sj.add(\"\");\r\n        for (Billet b : billets)\r\n            sj.add(b.saveFormat());\r\n        Main.ecrireFichierEntier(Main.USERS_PATH + Main.ACHETEURS + this.username + \"/Infos.csv\", sj.toString());\r\n    }\r\n    public String suivre(String acheteur) {\r\n        if (this.username.equals(acheteur))\r\n            return \"Vous ne pouvez pas vous suivre vous-même!\";\r\n        else if (acheteursSuivis.contains(acheteur))\r\n            return \"Vous suivez déjà cet acheteur!\";\r\n        else {\r\n            acheteursSuivis.add(acheteur);\r\n            save();\r\n            return \"Vous suivez maintenant \" + acheteur + \"!\";\r\n        }\r\n    }\r\n    public boolean aAcheteProduit(String nomProduit) {\r\n        for(Commande c : commandes) {\r\n            for(String pt : c.getProduits()) {\r\n                if (nomProduit.equals(pt))\r\n                    return true;\r\n            }\r\n        }\r\n        return false;\r\n    }\r\n    public ArrayList<String> getFollowers() {\r\n        return new ArrayList<>(suiveurs);\r\n    }\r\n    public ArrayList<String> getSuivis() {\r\n        return new ArrayList<>(acheteursSuivis);\r\n    }\r\n    public void ajouterPoints(int pts) {\r\n        this.points += pts;\r\n    }\r\n    public boolean billetExiste(int id) {\r\n        for (Billet b : this.billets){\r\n            if (b.id == id)\r\n                return true;\r\n        }\r\n        return false;\r\n    }\r\n    @Override\r\n    public String afficherMetriques() {\r\n        return \"\\nNombre de points: \" + points + \"\\nNombre total de commandes effectuées: \" + commandes.size() +\r\n                \"\\nNombre de followers: \" + suiveurs.size();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/Users/Acheteur.java b/src/main/java/unishop/Users/Acheteur.java
+--- a/src/main/java/unishop/Users/Acheteur.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/Users/Acheteur.java	(date 1703451624016)
+@@ -14,11 +14,13 @@
+     final ArrayList<String> acheteursSuivis;
+     final ArrayList<String> suiveurs;
+     final ArrayList<String> revendeursLikes;
++    final ArrayList<Evaluation> evaluations;
+     public final Commande panier;
+ 
+     public Acheteur(String u, String p, String em, long phone, String address, String nom,
+                     String prenom, int points, int likes, ArrayList<String> acheteursSuivis,
+-                    ArrayList<String> revendeursLikes, ArrayList<Billet> b, Commande panier, ArrayList<Commande> cmds){
++                    ArrayList<String> revendeursLikes, ArrayList<Billet> b, Commande panier, ArrayList<Commande> cmds,
++                    ArrayList<Evaluation> es){
+         super(u, p, em, phone, address, b, cmds);
+         this.nom = nom;
+         this.prenom = prenom;
+@@ -27,6 +29,7 @@
+         this.acheteursSuivis = new ArrayList<>(acheteursSuivis);
+         this.revendeursLikes = new ArrayList<>(revendeursLikes);
+         this.suiveurs = new ArrayList<>(); //Suiveurs en input
++        this.evaluations = new ArrayList<>(es); //Evaluations en input
+         this.panier = panier;
+     }
+ 
+@@ -80,9 +83,22 @@
+     public ArrayList<String> getSuivis() {
+         return new ArrayList<>(acheteursSuivis);
+     }
++    public ArrayList<Evaluation> getEvals() { return new ArrayList<>(evaluations);}
+     public void ajouterPoints(int pts) {
+         this.points += pts;
+     }
++    public void ajouterEvaluation(Evaluation e) {
++        this.evaluations.add(e);
++        saveEvals();
++    }
++    public void saveEvals() {
++        String[] evals = new String[evaluations.size()];
++        for (int i = 0; i < evals.length; ++i)
++            evals[i] = evaluations.get(i).getSaveFormatAcheteur();
++        Main.ecrireFichierEntier(Main.USERS_PATH + Main.ACHETEURS + username + "/Evaluations.csv",
++                String.join("\n", evals));
++        save();
++    }
+     public boolean billetExiste(int id) {
+         for (Billet b : this.billets){
+             if (b.id == id)
+Index: README.md
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Liste des TODOs (Il manque surement des choses)  \r\n  \r\nGÉNÉRAL  \r\nÉ- Toutes les fonctionnalités qu'un visiteur à accès (Requêtes publiques dans l'énoncé)  \r\nÉ- Gérer connection 24h après création du compte  \r\nÉ- Adresse courriel unique pour acheteur et revendeur  \r\nMar- Modifier profil revendeur et acheteur  \r\nMan- NOTIFICATIONS  \r\n\r\nACHETEUR  \r\nÉ- Liker évaluation et gestion des points  \r\nÉ- Annuler commande + Date d'arrivé estimée  \r\nÉ- Créer commande pour retour / échange + check jours  \r\nMan- Système de followers pour acheteurs  \r\nMan- Trouver revendeur  \r\nÉ- Payer avec ses points  \r\nMar- Ajouter métriques acheteurs (Nb articles achetés, likes sur évaluations)  \r\n  \r\nREVENDEURS  \r\nÉ- Update infos revendeur quand commande effectuée (revenu, nbproduitsVendus)  \r\nMan- Gestion commandes revendeur  \r\n  \r\n✅ Mar - Structure GitHub Remise\r\n  \r\nMar - Tests  \r\n✅ Mar - README  \r\nCédric - JAVADOC  \r\n  \r\nPAS DU CODE  \r\nÉ- Créer le database de l'énoncé du Devoir3  \r\nMan- Modifier le diagramme de classe à la fin  \r\n✅ Mar- Rapport  \r\n  \r\n  \r\nVous pouvez rajouter des TODOs si vous voyez qqch d'autres à faire  \r\nQuand vous avez fait un TODO, enlever le pas complètement: Mettez un DONE avant le tiret  \r\n  \r\nRegardez l'énoncé du Devoir2 (celui du Devoir3 contient pas grand-chose) et \r\nassurez-vous que ce que vous faite le respecte bien  \r\nRegarder les questions dans le Discord y'a des infos importantes des démonstrateurs  \r\nsi vous êtes pas sûrs de certains trucs  \r\n  \r\nLes attributs des classes devraient être complets mais il se peut que vous deviez  \r\nen rajouter. Essayer de pas changer ceux que j'ai fait par contre.  \r\n  \r\nOn s'en fou des push/commits du github (les insights aka combien chacun a contribué),  \r\nfaites ce que vous voulez tant que vous détruisez pas tout lmao    \r\nPas besoin de push votre Database quand vous faites des changements, pushez seulement  \r\nle code que vous avez modifié  \r\n  \r\nDemandez moi dans le groupe Messenger si vous avez des questions    \r\nÉtienne  \r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/README.md b/README.md
+--- a/README.md	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/README.md	(date 1703437321003)
+@@ -2,8 +2,8 @@
+   
+ GÉNÉRAL  
+ É- Toutes les fonctionnalités qu'un visiteur à accès (Requêtes publiques dans l'énoncé)  
+-É- Gérer connection 24h après création du compte  
+-É- Adresse courriel unique pour acheteur et revendeur  
++✅É- Gérer connection 24h après création du compte  
++✅É- Adresse courriel unique pour acheteur et revendeur  
+ Mar- Modifier profil revendeur et acheteur  
+ Man- NOTIFICATIONS  
+ 
+Index: Database/Produits/Produit2.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>Revendeur2,Produit2,Produit2,60.0,496,0,5.0\r\n1,1\r\n1,1\r\n1,awf,wfa,Ressource en ligne,1,15/11/2023,4\r\n\r\nAcheteur1,5,Bien
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Produits/Produit2.csv b/Database/Produits/Produit2.csv
+--- a/Database/Produits/Produit2.csv	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/Database/Produits/Produit2.csv	(date 1703451744786)
+@@ -3,4 +3,4 @@
+ 1,1
+ 1,awf,wfa,Ressource en ligne,1,15/11/2023,4
+ 
+-Acheteur1,5,Bien
+\ No newline at end of file
++Acheteur1,5,Bien,0,false
+\ No newline at end of file
+Index: src/main/java/unishop/Categories/Categorie.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop.Categories;\r\n\r\npublic abstract class Categorie {\r\n\r\n     public static String[] categories = new String[] {\"Livres et manuels\", \"Ressources d'apprentissage\",\r\n             \"Articles de papeterie\", \"Matériel informatique\", \"Équipement de bureau\"};\r\n\r\n     public abstract short getCatID();\r\n\r\n     public static String getCat(int id) {\r\n          return categories[id];\r\n     };\r\n     public String getCat() {return categories[getCatID()];}\r\n\r\n     public abstract String getFormatSauvegarde();\r\n\r\n     public abstract String getFormatDisplay();\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/Categories/Categorie.java b/src/main/java/unishop/Categories/Categorie.java
+--- a/src/main/java/unishop/Categories/Categorie.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/Categories/Categorie.java	(date 1703441418016)
+@@ -2,7 +2,7 @@
+ 
+ public abstract class Categorie {
+ 
+-     public static String[] categories = new String[] {"Livres et manuels", "Ressources d'apprentissage",
++     public static final String[] categories = new String[] {"Livres et manuels", "Ressources d'apprentissage",
+              "Articles de papeterie", "Matériel informatique", "Équipement de bureau"};
+ 
+      public abstract short getCatID();
+Index: src/main/java/unishop/Users/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop.Users;\r\n\r\nimport unishop.*;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.Stack;\r\n\r\npublic abstract class User {\r\n\r\n    protected final String username;\r\n    protected String password;\r\n    protected String email;\r\n    protected long phone;\r\n    protected String address;\r\n    protected final ArrayList<Billet> billets;\r\n    protected final ArrayList<Commande> commandes;\r\n    protected Stack<Notification> notifications;\r\n\r\n    protected User(String username, String password, String email, long phone, String address,\r\n                   ArrayList<Billet> billets, ArrayList<Commande> commandes) {\r\n        this.username = username;\r\n        this.password = password;\r\n        this.email = email;\r\n        this.phone = phone;\r\n        this.address = address;\r\n        this.billets = new ArrayList<>(billets);\r\n        this.commandes = new ArrayList<>(commandes);\r\n\r\n    }\r\n    protected abstract void save();\r\n    public abstract boolean isAcheteur();\r\n    public abstract String afficherMetriques();\r\n    public void addBillet(Billet b) {\r\n        this.billets.add(b);\r\n        save();\r\n    }\r\n    public ArrayList<Billet> getBillets() {\r\n        return new ArrayList<>(billets);\r\n    }\r\n    public Billet trouverBillet(int id) {\r\n        for (Billet b : billets) {\r\n            if (b.id == id)\r\n                return b;\r\n        }\r\n        return null;\r\n    }\r\n    public ArrayList<Commande> getCommandes() {\r\n        return new ArrayList<>(commandes);\r\n    }\r\n    public abstract void ajouterCommande(Commande c);\r\n\r\n    public String getUsername() {\r\n        return username;\r\n    }\r\n\r\n    public String getAddress() {\r\n        return address;\r\n    }\r\n\r\n    public void setEmail(String email) {\r\n        this.email = email;\r\n    }\r\n\r\n    public void setPhone(long phone) {\r\n        this.phone = phone;\r\n    }\r\n\r\n    public void setAddress(String address) {\r\n        this.address = address;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/Users/User.java b/src/main/java/unishop/Users/User.java
+--- a/src/main/java/unishop/Users/User.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/Users/User.java	(date 1703436998948)
+@@ -27,7 +27,7 @@
+         this.commandes = new ArrayList<>(commandes);
+ 
+     }
+-    protected abstract void save();
++    public abstract void save();
+     public abstract boolean isAcheteur();
+     public abstract String afficherMetriques();
+     public void addBillet(Billet b) {
+Index: Database/Users/Acheteurs/a/Evaluations.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Users/Acheteurs/a/Evaluations.csv b/Database/Users/Acheteurs/a/Evaluations.csv
+new file mode 100644
+--- /dev/null	(date 1703452945292)
++++ b/Database/Users/Acheteurs/a/Evaluations.csv	(date 1703452945292)
+@@ -0,0 +1,1 @@
++5,g,1,true
+\ No newline at end of file
+Index: Database/Produits/Super ordi.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>p,Super ordi,Il est cool et puissant \\n Yay!,1000.0,99999,20000,4.0\r\nI1,I2\r\nV1,V2\r\n3,HP,57,Ordinateur,11/11/2023\r\na\r\na,5,very good\r\na,3,nice
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Produits/Super ordi.csv b/Database/Produits/Super ordi.csv
+--- a/Database/Produits/Super ordi.csv	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/Database/Produits/Super ordi.csv	(date 1703451744779)
+@@ -3,5 +3,5 @@
+ V1,V2
+ 3,HP,57,Ordinateur,11/11/2023
+ a
+-a,5,very good
+-a,3,nice
+\ No newline at end of file
++a,5,very good,0,false
++a,3,nice,0,false
+\ No newline at end of file
+Index: Database/Users/Acheteurs/a/Infos.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>a,a,1,a,a,a,5,0\r\n\r\n\r\n4,a,Pencil Sharpener,broken,false,false,,Super ordi,true\r\n5,a,Pencil Sharpener,awd,true,false,,,false\r\n6,a,Pencil Sharpener,wadwa,false,true,in da trash,Lol,true\r\n9,a,Pencil Sharpener,Echange,false,false,wawae,Super ordi,false\r\n10,a,Super ordi,no,false,false,,Super ordi,false\r\n18,a,Produit2,no bueno,false,false,,Produit2,true\r\n17,a,Produit2,wae,true,false,,,false
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/Users/Acheteurs/a/Infos.csv b/Database/Users/Acheteurs/a/Infos.csv
+--- a/Database/Users/Acheteurs/a/Infos.csv	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/Database/Users/Acheteurs/a/Infos.csv	(date 1703452945293)
+@@ -1,4 +1,4 @@
+-a,a,1,a,a,a,5,0
++a,a,1,a,a,a,15,0
+ 
+ 
+ 4,a,Pencil Sharpener,broken,false,false,,Super ordi,true
+Index: src/main/java/unishop/ControleurRevendeur.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package unishop;\r\n\r\nimport unishop.Categories.*;\r\nimport unishop.Users.Acheteur;\r\nimport unishop.Users.Revendeur;\r\n\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport static unishop.Main.*;\r\n\r\npublic class ControleurRevendeur {\r\n    private static short choix;\r\n    private static Revendeur revendeur;\r\n    static void menuRevendeur(Revendeur r) {\r\n        revendeur = r;\r\n        while (true) {\r\n            System.out.println(\"\\nVoici le menu Revendeur:\");\r\n            choix = selectionChoix(new String[]{\"Offrir un nouveau produit\", \"Accéder aux commandes\", \"Voir les billets\",\r\n                    \"Modifier un produit\", \"Changer les informations du profil\", \"Afficher les métriques\",\r\n                    \"Voir les notifications\", \"Se déconnecter\"});\r\n            switch (choix) {\r\n                case 1 -> offrirProduit();\r\n                case 2 -> gererCommandesRevendeur();\r\n                case 3 -> gererBilletsRevendeur();\r\n                case 4 -> modifierProduit();\r\n                case 5 -> changerInformations();\r\n                case 6 -> System.out.println(revendeur.afficherMetriques());\r\n                case 7 -> System.out.println(afficherNotifications());\r\n                case 8 -> {return;}\r\n            }\r\n        }\r\n    }\r\n\r\n    static void offrirProduit() {\r\n        System.out.println(\"\\nVeuillez remplir les informations concernant votre produit.\");\r\n        System.out.println(\"Commencez par choisir une catégorie:\");\r\n        choix = selectionChoix(Categorie.categories);\r\n        try {\r\n            System.out.print(\"Quel est le titre de votre produit? (Ne rien mettre pour retourner au menu) \");\r\n            String titre = br.readLine();\r\n            if (titre.isEmpty())\r\n                return;\r\n            List<String> titres = fichiersDansDossier(PRODUITS_PATH);\r\n            while (titres.contains(titre + CSV)) {\r\n                System.out.print(\"Ce nom de produit existe déjà. Veuillez en entrer un autre: \");\r\n                titre = br.readLine();\r\n            }\r\n            System.out.print(\"Veuillez entrer une description: \");\r\n            String description = br.readLine();\r\n\r\n            System.out.print(\"Veuillez entrer des liens pour des images (Séparés pas des \\\",\\\"): \");\r\n            String[] images = br.readLine().split(\",\");\r\n            System.out.print(\"Veuillez entrer des liens pour des vidéos (Séparés pas des \\\",\\\"): \");\r\n            String[] videos = br.readLine().split(\",\");\r\n            Categorie c = null;\r\n            switch(choix) {\r\n                case 1 -> c = offrirLivre();\r\n                case 2 -> c = offrirRessource();\r\n                case 3 -> c = offrirPapeterie();\r\n                case 4 -> c = offrirInfo();\r\n                case 5 -> c = offrirBureau();\r\n            }\r\n            System.out.print(\"Veuillez entrer un prix: \");\r\n            float prix = demanderFloat(\"un prix\");\r\n            System.out.println(\"Voulez vous offrir une promotion en points?\");\r\n            int points = (int) Math.floor(prix);\r\n            int pointsMax = (int) Math.floor(prix * 19);\r\n            if(1 == selectionChoix(new String[] {\"Oui\", \"Non\"})) {\r\n                System.out.print(\"Entrez un nombre de points (Plus petit ou égal à \" + pointsMax + \"): \");\r\n                int pts = demanderIntPositif(\"un nombre de points\");\r\n                while (pts > pointsMax) {\r\n                    System.out.print(\"Vous avez entré un nombre de points trop grand! Veuillez réessayer: \");\r\n                    pts = demanderIntPositif(\"un nombre de points\");\r\n                }\r\n                points += pts;\r\n            }\r\n            System.out.print(\"Veuillez entrer une quantité initiale à mettre dans l'inventaire: \");\r\n            int quantite = demanderIntPositif(\"une quantité\");\r\n            Produit p = new Produit(revendeur.getUsername(), titre, description, prix, quantite, points, images, videos,\r\n                    c, new ArrayList<>(), new ArrayList<>());\r\n            p.save();\r\n            revendeur.ajouterProduit(p);\r\n            System.out.println(\"Votre nouveau produit \" + titre + \" a été ajouté avec succès!\");\r\n        }\r\n        catch (IOException e) {\r\n            e.printStackTrace();\r\n            System.out.println(\"Quelque chose s'est mal passé. Veuillez réessayer.\");\r\n            offrirProduit();\r\n        }\r\n    }\r\n    static Categorie offrirLivre() throws IOException {\r\n        System.out.println(\"Veuillez choisir le genre de votre livre:\");\r\n        String genre = CLivres.genres[selectionChoix(CLivres.genres) - 1];\r\n        System.out.print(\"Entrez le ISBN: \");\r\n        long isbn = demanderLong(\"un ISBN\");\r\n        System.out.print(\"Entrez l'auteur: \");\r\n        String auteur = br.readLine();\r\n        System.out.print(\"Entrez la maison d'édition: \");\r\n        String maison = br.readLine();\r\n        System.out.print(\"Entrez la date de parution (JJ/MM/AAAA): \");\r\n        String date = br.readLine();\r\n        System.out.print(\"Entrez le numéro d'édition: \");\r\n        int numEdition = demanderIntPositif(\"un numéro d'édition\");\r\n        System.out.print(\"Entrez le numéro de volume: \");\r\n        int numVolume = demanderIntPositif(\"un numéro de volume\");\r\n        return new CLivres(auteur, maison, genre, isbn, date, numEdition, numVolume);\r\n\r\n    }\r\n    static Categorie offrirRessource() throws IOException{\r\n        System.out.println(\"Est-ce un produit en ligne ou imprimé?\");\r\n        String type = CRessources.types[selectionChoix(CRessources.types) - 1];\r\n        System.out.print(\"Entrez le ISBN: \");\r\n        long isbn = demanderLong(\"un ISBN\");\r\n        System.out.print(\"Entrez l'auteur: \");\r\n        String auteur = br.readLine();\r\n        System.out.print(\"Entrez l'organisation: \");\r\n        String organisation = br.readLine();\r\n        System.out.print(\"Entrez la date de parution (JJ/MM/AAAA): \");\r\n        String date = br.readLine();\r\n        System.out.print(\"Entrez le numéro d'édition: \");\r\n        int numEdition = demanderIntPositif(\"un numéro d'édition\");\r\n        return new CRessources(auteur, organisation, type, isbn, date, numEdition);\r\n    }\r\n    static Categorie offrirPapeterie() throws IOException {\r\n        System.out.println(\"Veuillez choisir une sous-catégorie: \");\r\n        String sousCat = CPapeterie.sousCats[selectionChoix(CPapeterie.sousCats) - 1];\r\n        System.out.print(\"Entrez la marque: \");\r\n        String marque = br.readLine();\r\n        System.out.print(\"Entrez le modèle: \");\r\n        String modele = br.readLine();\r\n        return new CPapeterie(marque, modele, sousCat);\r\n    }\r\n    static Categorie offrirInfo() throws IOException {\r\n        System.out.println(\"Veuillez choisir une sous-catégorie: \");\r\n        String sousCat = CInformatique.sousCats[selectionChoix(CInformatique.sousCats) - 1];\r\n        System.out.print(\"Entrez la marque: \");\r\n        String marque = br.readLine();\r\n        System.out.print(\"Entrez le modèle: \");\r\n        String modele = br.readLine();\r\n        System.out.print(\"Entrez la date de parution (JJ/MM/AAAA): \");\r\n        String date = br.readLine();\r\n        return new CInformatique(marque, modele, sousCat, date);\r\n    }\r\n    static Categorie offrirBureau() throws IOException {\r\n        System.out.println(\"Veuillez choisir une sous-catégorie: \");\r\n        String sousCat = CBureau.sousCats[selectionChoix(CBureau.sousCats) - 1];\r\n        System.out.print(\"Entrez la marque: \");\r\n        String marque = br.readLine();\r\n        System.out.print(\"Entrez le modèle: \");\r\n        String modele = br.readLine();\r\n        return new CBureau(marque, modele, sousCat);\r\n    }\r\n    static void gererCommandesRevendeur() {\r\n        System.out.println(\"\\nTODO\");\r\n    }\r\n    static void gererBilletsRevendeur() {\r\n        ArrayList<Billet> ba = revendeur.getBillets();\r\n        if (ba.isEmpty()) {\r\n            System.out.println(\"\\nVous n'avez aucun billet!\");\r\n            return;\r\n        }\r\n        while (true) {\r\n            System.out.println(\"\\nChoissisez un billet: \");\r\n            String[] bs = new String[ba.size() + 1];\r\n            for(int i = 0; i < ba.size(); ++i) {\r\n                bs[i] = ba.get(i).afficherMenu();\r\n            }\r\n            bs[bs.length - 1] = \"Retour au menu\";\r\n            choix = selectionChoix(bs);\r\n            if (choix == bs.length)\r\n                return;\r\n            Billet b = ba.get(choix - 1);\r\n            System.out.println(\"\\n\" + b.afficher());\r\n            if (!b.comfirmerLivraisonInitial() && !b.pasDeSolution())\r\n                continue;\r\n            System.out.println(\"\\nQue voulez-vous faire?\");\r\n            choix = selectionChoix(new String[] {\"Donner une solution\", \"Confirmer l'arrivée du produit problématique\",\r\n                    \"Retourner au menu\"});\r\n            if (choix == 1) {\r\n                if (b.pasDeSolution()) {\r\n                    System.out.print(\"Entrez votre solution: \");\r\n                    try {\r\n                        String solution = br.readLine();\r\n                        b.setProbRev(solution);\r\n                        Acheteur a = initialiserAcheteur(b.nomAche);\r\n                        a.trouverBillet(b.id).setProbRev(solution);\r\n                        a.save();\r\n                        revendeur.save();\r\n                        System.out.println(\"\\nVous avez ajouté une solution au billet!\");\r\n                    } catch (IOException e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                }\r\n                else {\r\n                    System.out.println(\"\\nVous aviez déjà ajouté une solution à ce billet!\");\r\n                }\r\n            }\r\n            else if (choix == 2) {\r\n                if (b.comfirmerLivraisonInitial()) {\r\n                    try {\r\n                        Acheteur a = initialiserAcheteur(b.nomAche);\r\n                        a.trouverBillet(b.id).comfirmerLivraisonInitial();\r\n                        a.save();\r\n                        revendeur.save();\r\n                        System.out.println(\"\\nVous avez confirmer la livraison du produit problématique à l'entrepôt!\");\r\n                    } catch (IOException e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                }\r\n                else\r\n                    System.out.println(\"\\nVous aviez déjà confirmé la réception du produit problématique pour ce \" +\r\n                            \"billet!\");\r\n            }\r\n            else\r\n                break;\r\n        }\r\n\r\n    }\r\n    static void modifierProduit () {\r\n        while (true) {\r\n            System.out.println(\"\\nChoisir une option: \");\r\n            choix = selectionChoix(new String[] {\"Restocker un produit\", \"Gérer une promotion\", \"Retourner au menu\"});\r\n            if (choix == 3)\r\n                return;\r\n            Produit p = revendeur.getProduitAvecChoix();\r\n            if (choix == 1) {\r\n                System.out.print(\"Entrez la quantité que vous voulez ajouter à l'inventaire: \");\r\n                try {\r\n                    p.restocker(demanderIntPositif(\"une quantité\"));\r\n                    System.out.println(\"\\nVous avez maintenant \" + p.getQuantite() + \" \" + p.titre + \" en inventaire!\");\r\n                } catch(IOException e) {\r\n                    e.printStackTrace();\r\n                }\r\n                continue;\r\n            }\r\n            while (true) {\r\n                System.out.println(\"\\nQue voulez-vous faire avec la promotion?\");\r\n                choix = selectionChoix(new String[] {\"Enlever la promotion\", \"Modifier la promotion\", \"\" +\r\n                        \"Retourner au menu\"});\r\n                if (choix == 3)\r\n                    break;\r\n                if (choix == 1) {\r\n                    if (p.estEnPromotion()) {\r\n                        p.enleverPromotion();\r\n                        System.out.println(\"\\nVous avez enlevé la promotion de \" + p.titre + \"!\");\r\n                    }\r\n                    else\r\n                        System.out.println(\"\\nCe produit n'est pas en promotion!\");\r\n\r\n                }\r\n                else {\r\n                    int pointsMax = (int) Math.floor(p.prix * 19);\r\n                    System.out.print(\"Entrez un nombre de points (Plus petit ou égal à \" + pointsMax + \"): \");\r\n                    try {\r\n                        int pts = demanderIntPositif(\"un nombre de points\");\r\n                        while (pts > pointsMax || pts == 0) {\r\n                            System.out.print(\"Vous avez entré un nombre de points invalide! Veuillez réessayer: \");\r\n                            pts = demanderIntPositif(\"un nombre de points\");\r\n                        }\r\n                        p.changerPromotion((int)Math.floor(p.prix) + pts);\r\n                        System.out.println(\"\\n\" + p.titre + \" a maintenant une promotion de \" + pts + \" points!\");\r\n                    } catch (IOException e) {\r\n                        e.printStackTrace();\r\n                    }\r\n                }\r\n            }\r\n        }\r\n    }\r\n    static void changerInformations() {\r\n        System.out.println(\"\\nTODO\");\r\n    }\r\n    static String afficherNotifications() {\r\n        return \"\\nTODO\";\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/unishop/ControleurRevendeur.java b/src/main/java/unishop/ControleurRevendeur.java
+--- a/src/main/java/unishop/ControleurRevendeur.java	(revision 3e75cc64eb30f1ec6e32a8fe12920946257a40ce)
++++ b/src/main/java/unishop/ControleurRevendeur.java	(date 1703446544925)
+@@ -68,7 +68,7 @@
+             System.out.println("Voulez vous offrir une promotion en points?");
+             int points = (int) Math.floor(prix);
+             int pointsMax = (int) Math.floor(prix * 19);
+-            if(1 == selectionChoix(new String[] {"Oui", "Non"})) {
++            if(choixOuiNon()) {
+                 System.out.print("Entrez un nombre de points (Plus petit ou égal à " + pointsMax + "): ");
+                 int pts = demanderIntPositif("un nombre de points");
+                 while (pts > pointsMax) {
+Index: Database/emails.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Database/emails.csv b/Database/emails.csv
+new file mode 100644
+--- /dev/null	(date 1703437128474)
++++ b/Database/emails.csv	(date 1703437128474)
+@@ -0,0 +1,1 @@
++a,t,3,t3,t4,5
+\ No newline at end of file
+diff --git a/Database/Users/Acheteurs/Acheteur1/Evaluations.csv b/Database/Users/Acheteurs/Acheteur1/Evaluations.csv
+new file mode 100644
+diff --git a/Database/Users/Acheteurs/Acheteur2/Evaluations.csv b/Database/Users/Acheteurs/Acheteur2/Evaluations.csv
+new file mode 100644
+diff --git a/Database/Users/Acheteurs/Acheteur4/Evaluations.csv b/Database/Users/Acheteurs/Acheteur4/Evaluations.csv
+new file mode 100644
+diff --git a/Database/Users/Acheteurs/Acheteur5/Evaluations.csv b/Database/Users/Acheteurs/Acheteur5/Evaluations.csv
+new file mode 100644
+diff --git a/Database/Users/Acheteurs/Acheteur3/Evaluations.csv b/Database/Users/Acheteurs/Acheteur3/Evaluations.csv
+new file mode 100644
