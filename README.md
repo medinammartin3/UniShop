@@ -1,8 +1,6 @@
-# Projet - IFT 2255 #
+# Unishop #
 
 ## Manuel d'utilisation ##
-
-### Titre: UniShop ###
   
 ### Description ###
 UniShop, le logiciel ultime pour les étudiants, offre une expérience complète en permettant 
