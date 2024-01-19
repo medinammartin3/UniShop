@@ -93,8 +93,11 @@ Veuillez noter qu'on a implémenté une action GitHub qui roulera les tests unit
 
 Ce projet ce projet est un travail pratique du cours IFT2255 (Génie logiciel). Il a été effectué en groupe avec [Étienne Mitchell-Bouchard](https://github.com/DarkZant) et [Mandi Vigier](https://github.com/Mandchouno).
 
+<br>
 
+```txt
 ©  /\\/\//\//\
   \|/|\|/|\|/|/
  /|/|\|/|\|\’ .\
  ‘`|_|————|_|———o
+```
