@@ -2,6 +2,8 @@
 `*`*French version follows*`*`
 
 # Unishop
+
+***Date :** Fall 2023*
   
 ## Description 
 
@@ -50,6 +52,8 @@ ___
 <br>
 
 # Unishop
+
+***Date :** Automne 2023*
   
 ## Description 
 
