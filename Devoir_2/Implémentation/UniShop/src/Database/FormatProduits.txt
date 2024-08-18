@@ -1,6 +1,0 @@
-NomRevendeur, Titre, Description, Prix, Quantite, Points
-Images[]
-Videos[]
-CatID, Auteur/Marque, .../Modèle, SousCat, ...
-NomsAcheteursLikes[]
-Évaluations (Reste des lignes)
